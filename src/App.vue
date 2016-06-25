@@ -13,23 +13,42 @@
         <li>其他</li>
       </ul>
     </div>
-    <div class="news-container" :style="styleObj" @touchstart="dragBegin($event)" @touchmove="dragMove($event)" @touchend="dragEnd($event)">
+    <mt-loadmore :top-method="loadTop">
+      <ul>
+        <li v-for="item in news">
+          <h1>{{item.title}}</h1>
+          <h1>{{item.title}}</h1>
+          <h1>{{item.title}}</h1>
+          <h1>{{item.title}}</h1>
+          <h1>{{item.title}}</h1>
+        </li>
+      </ul>
+    </mt-loadmore>
+    <!--
+    <div id="wrapper" class="news-container" :style="styleObj" @touchstart="handleStart" @touchmove="handleMove" @touchend="handleEnd">
       <div class="loading-bar"></div>
-      <div class="news-item" v-for="item in news">
-        <div class="news-poster">
-        </div>
-        <div class="news-summary">
-          <h4 class="news-title">{{item.title}}</h4>
-          <span class="news-tag">{{item.tag}}</span>
-          <span class="news-comment">{{item.comment}}</span>
-        </div>
-      </div>
-    </div>
+      <ul>
+        <li v-for="item in news">
+          <div class="news-item">
+            <div class="news-poster">
+            </div>
+            <div class="news-summary">
+              <h4 class="news-title">{{item.title}}</h4>
+              <span class="news-tag">{{item.tag}}</span>
+              <span class="news-comment">{{item.comment}}</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div> -->
   </div>
 </template>
 
 <script>
+import { Loadmore } from 'mint-ui'
+
 export default {
+
   data () {
     return {
       news: [{
@@ -57,31 +76,27 @@ export default {
         tag: 'Js',
         comment: 12
       }],
-      startOffset: 0,
-      offsetY: 0
+      startY: 0
     }
   },
   methods: {
-    dragBegin (e) {
-      e.preventDefault()
-      this.startOffset = parseInt(e.touches[0].clientY)
+    handleStart(e){
+      this.startY = e.touches[0].clientY
     },
-    dragMove (e) {
-      this.offsetY = parseInt(e.touches[0].clientY)
+    handleMove(e){
+      this.currentY = e.touches[0].clientY
+      console.log(this.currentY - this.startY)
     },
-    dragEnd (e) {
-      // this.offsetY = this.startOffset
-    }
-  },
-  computed: {
-    deltaOffset () {
-      let delta = this.offsetY - this.startOffset
-      return delta
+    handleEnd(e){
+
     },
-    styleObj () {
-      return {
-        transform: `translate3d(0, ${this.deltaOffset}px, 0)`
-      }
+    loadTop(id){
+      this.news.push({
+        title: 'Angular hehe',
+        tag: 'Js',
+        comment: 12
+      })
+      this.$broadcast('onTopLoaded', id);
     }
   }
 }
@@ -94,7 +109,6 @@ export default {
 }
 html, body {
   height: 100%;
-  width: 100%;
 }
 
 .clx{
@@ -106,8 +120,6 @@ html, body {
 }
 
 #body{
-  height: 100%;
-  width: 100%;
   background: #ccc;
 }
 
@@ -122,7 +134,6 @@ header{
 
 .tabs-bar{
   position: relative;
-  z-index: 200;
   ul{
     list-style: none;
     display: flex;
@@ -135,35 +146,6 @@ header{
       &.active{
         color: #ea4141;
         border-bottom: 2px solid #ea4141;
-      }
-    }
-  }
-}
-
-.news-container{
-  position: relative;
-  margin-top: -50px;
-  background: #fff;
-  z-index: 2;
-  .loading-bar{
-    height: 50px;
-    background: #ccc;
-  }
-  .news-item{
-    padding: 20px 10px;
-    display: flex;
-    flex-flow: row nowrap;
-    .news-poster{
-      height: 80px;
-      width: 30%;
-      background: #ccc;
-    }
-    .news-summary{
-      width: 70%;
-      margin-left: 10px;
-      .news-title{
-        font-size: 20px;
-        font-weight: 800;
       }
     }
   }
