@@ -6,14 +6,28 @@
             <img src="../assets/logo.png" transition="fade-ltr" v-show="show" />
             <img src="../assets/mint-ui.svg" transition="fade-rtl" v-show="show" />
         </div>
-        <button type="button" v-link="'list'">Enter</button>
+        <button type="button" @click="go">Enter</button>
     </div>
 </template>
 <script>
+    import router from '../main.js'
+    import { Indicator } from 'mint-ui'
     export default{
         data() {
             return {
                 show: false
+            }
+        },
+        methods: {
+            go() {
+                Indicator.open({
+                  text: '强行loading...',
+                  spinnerType: 'fading-circle'
+                })
+                setTimeout(() => {
+                    Indicator.close()
+                    this.$route.router.go('list')
+                }, 2000)
             }
         },
         ready() {

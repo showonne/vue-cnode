@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import { Loadmore, Navbar, TabItem } from 'mint-ui'
+    import { Loadmore, Navbar, TabItem, Indicator } from 'mint-ui'
     export default {
         components: { Loadmore, Navbar, TabItem },
         data() {
@@ -76,9 +76,14 @@
             'default': 'all'
         }],
         ready() {
+            Indicator.open({
+              text: '加载中...',
+              spinnerType: 'fading-circle'
+            })
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
+                    Indicator.close()
                 }, (err) => {
                     console.log('err', err)
                 })
@@ -86,9 +91,14 @@
         watch: {
             selected() {
                 this.page = 1
+                Indicator.open({
+                  text: '切换中...',
+                  spinnerType: 'fading-circle'
+                })
                 this.getTopics()
                     .then((res) => {
                         this.dataList = res.json().data
+                        Indicator.close()
                     })
             }
         },
