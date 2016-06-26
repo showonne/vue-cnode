@@ -10,7 +10,7 @@
         <div class="shadow-line"></div>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
             <ul>
-                <li v-for="item in dataList" class="cell">
+                <li v-for="item in dataList" class="cell" v-link="{name: 'detail', params: {id: item.id}}">
                     <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" data-tab="{{item.top === true ? 'top' : item.good === true ? 'good' : item.tab | tab}}">{{item.title}}</h2>
                     <div class="summary">
                         <img :src="item.author.avatar_url" />
@@ -83,6 +83,7 @@
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
+                    console.log(res.json().data)
                     Indicator.close()
                 }, (err) => {
                     console.log('err', err)

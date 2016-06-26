@@ -24,6 +24,12 @@ router.map({
         component: (resolve) => {
             require(['./components/List.vue'], resolve)
         }
+    },
+    '/detail/:id': {
+        name: 'detail',
+        component: (resolve) => {
+            require(['./components/Detail.vue'], resolve)
+        }
     }
 })
 
