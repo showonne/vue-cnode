@@ -7,7 +7,7 @@
             <mt-tab-item id="share">分享</mt-tab-item>
             <mt-tab-item id="job">招聘</mt-tab-item>
         </mt-navbar>
-        <div class="padding-bar"></div>
+        <div class="shadow-line"></div>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
             <ul>
                 <li v-for="item in dataList" class="cell">
@@ -20,8 +20,8 @@
                                 <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
                             </p>
                             <p>
-                                <span>{{item.create_at | date }}</span>
-                                <span>{{item.last_reply_at | date }}</span>
+                                <span class="create-at">{{item.create_at | date }}</span>
+                                <span class="last-reply-at">{{item.last_reply_at | date }}</span>
                             </p>
                         </div>
                     </div>
@@ -94,7 +94,23 @@
         },
         filters: {
             date(input){
-                return new Date(String(input)).getFullYear() + '/' + (new Date(String(input)).getMonth() + 1) + '/' + new Date(String(input)).getDate()
+                let now = Date.now(), date = new Date(String(input)).getTime(), delta = parseInt((now - date) / 1000)
+                switch (true) {
+                    case (delta < 60):
+                        return '刚刚'
+                    case (delta >= 60 && delta < 60 * 60):
+                        return `${parseInt(delta / 60)}分钟前`
+                    case (delta >= 60 * 60 && delta < 60 * 60 * 24):
+                        return `${parseInt(delta / (60 * 60))}小时前`
+                    case (delta >= 60 * 60 * 24 && delta < 60 * 60 * 24 * 30):
+                        return `${parseInt(delta / (60 * 60 * 24))}天前`
+                    case (delta >= 60 * 60 * 24 * 30 && delta < 60 * 60 * 24 * 365):
+                        return `${parseInt(delta / (60 * 60 * 24 * 30))}月前`
+                    case (delta >= 60 * 60 * 24 * 365):
+                        return `${parseInt(delta / (60 * 60 * 24 * 30 * 365))}月前`
+                    default:
+                        return '...'
+                }
             },
             tab(input){
                 return {
@@ -110,20 +126,14 @@
 </script>
 
 <style lang='less'>
-    *{
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      height: 100%;
-    }
-    .padding-bar{
+    .shadow-line{
         height: 3px;
         width: 100%;
-        background: #ccc;
+        box-shadow: 0 2px 2px rgba(0,0,0,.1);
     }
     .cell{
         padding: 10px 15px;
+        border-bottom: 1px solid #bad1c6;
     }
     .cell-title{
         font-size: 16px;
@@ -191,6 +201,9 @@
             .visitnum b{
                 color: #26a2ff;
                 font-weight: 800;
+            }
+            .create-at, .last-reply-at{
+                color: #666;
             }
         }
     }
