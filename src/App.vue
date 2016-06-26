@@ -38,40 +38,28 @@
         data() {
             return {
                 dataList: [],
-                page: 1,
-                pending: true
+                page: 1
             }
         },
         methods: {
             loadTop(id) {
-                if(!this.pending){
-                    console.log('load top called')
-                    this.page = 1
-                    this.pending = true
-                    this.getTopics()
-                        .then((res) => {
-                            this.dataList = res.json().data
-                            this.$broadcast('onTopLoaded', id);
-                            this.pending = false
-                        }, (err) => {
-                            console.log('err', err)
-                        })
-                }
+                console.log('load top called')
+                this.page = 1
+                this.getTopics()
+                    .then((res) => {
+                        this.dataList = res.json().data
+                        this.$broadcast('onTopLoaded', id);
+                    }, (err) => {
+                        console.log('err', err)
+                    })
             },
             loadBottom(id) {
-                if(!this.pending){
-                    console.log('loadBottom called')
-                    this.pending = true
-                    this.page += 1
-                    this.getTopics()
-                        .then((res) => {
-                            this.dataList = this.dataList.concat(res.json().data)
-                            this.$broadcast('onBottomLoaded', id)
-                            this.pending = false
-                        })
-                }else{
-                    console.log('hh')
-                }
+                this.page += 1
+                this.getTopics()
+                    .then((res) => {
+                        this.dataList = this.dataList.concat(res.json().data)
+                        this.$broadcast('onBottomLoaded', id)
+                    })
             },
             getTopics() {
                 return this.$http.get('/api/topics', {
@@ -88,26 +76,20 @@
             'default': 'all'
         }],
         ready() {
-            console.log('ready called')
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
-                    this.pending = false
                 }, (err) => {
                     console.log('err', err)
                 })
         },
         watch: {
             selected() {
-                if(!this.pending){
-                    this.pending = true
-                    this.page = 1
-                    this.getTopics()
-                        .then((res) => {
-                            this.dataList = res.json().data
-                            this.pending = false
-                        })
-                }
+                this.page = 1
+                this.getTopics()
+                    .then((res) => {
+                        this.dataList = res.json().data
+                    })
             }
         },
         filters: {
