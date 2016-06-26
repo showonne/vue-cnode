@@ -7,7 +7,8 @@
             <mt-tab-item id="share">分享</mt-tab-item>
             <mt-tab-item id="job">招聘</mt-tab-item>
         </mt-navbar>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom">
+        <div class="padding-bar"></div>
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
             <ul>
                 <li v-for="item in dataList" class="cell">
                     <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" data-tab="{{item.top === true ? 'top' : item.good === true ? 'good' : item.tab | tab}}">{{item.title}}</h2>
@@ -38,13 +39,13 @@
             return {
                 dataList: [],
                 page: 1,
-                pending: false
+                pending: true
             }
         },
         methods: {
             loadTop(id) {
-                console.log('load top called')
                 if(!this.pending){
+                    console.log('load top called')
                     this.page = 1
                     this.pending = true
                     this.getTopics()
@@ -68,6 +69,8 @@
                             this.$broadcast('onBottomLoaded', id)
                             this.pending = false
                         })
+                }else{
+                    console.log('hh')
                 }
             },
             getTopics() {
@@ -89,6 +92,7 @@
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
+                    this.pending = false
                 }, (err) => {
                     console.log('err', err)
                 })
@@ -130,6 +134,11 @@
     }
     html, body {
       height: 100%;
+    }
+    .padding-bar{
+        height: 3px;
+        width: 100%;
+        background: #ccc;
     }
     .cell{
         padding: 10px 15px;
