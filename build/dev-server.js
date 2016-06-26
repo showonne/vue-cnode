@@ -6,7 +6,9 @@ var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
-
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var logger  = require('express-log')
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // Define HTTP proxies to your custom API backend
@@ -33,7 +35,7 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-// proxy api requests
+//proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
   if (typeof options === 'string') {
@@ -52,9 +54,18 @@ app.use(devMiddleware)
 // compilation error display
 app.use(hotMiddleware)
 
+
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
+
+
+app.use(logger())
+
 // serve pure static assets
 var staticPath = path.posix.join(config.build.assetsPublicPath, config.build.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+
 
 module.exports = app.listen(port, function (err) {
   if (err) {

@@ -19,6 +19,14 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     port: 8080,
-    proxyTable: {}
+    proxyTable: {
+        '/api': {
+            target: 'https://cnodejs.org/api/v1',
+            changeOrigin: true,
+            pathRewrite: {
+                '^/api': ''
+            }
+        }
+    }
   }
 }

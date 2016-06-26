@@ -1,154 +1,211 @@
 <template>
-  <div id="body">
-    <header>
-      <span>Title</span>
-      <span>icon</span>
-    </header>
-    <div class="tabs-bar clx">
-      <ul>
-        <li class="active">头条</li>
-        <li>娱乐</li>
-        <li>热点</li>
-        <li>体育</li>
-        <li>其他</li>
-      </ul>
+    <div id="body">
+        <mt-navbar class="page-part" :selected.sync="selected">
+            <mt-tab-item id="all">全部</mt-tab-item>
+            <mt-tab-item id="good">精华</mt-tab-item>
+            <mt-tab-item id="ask">问答</mt-tab-item>
+            <mt-tab-item id="share">分享</mt-tab-item>
+            <mt-tab-item id="job">招聘</mt-tab-item>
+        </mt-navbar>
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom">
+            <ul>
+                <li v-for="item in dataList" class="cell">
+                    <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" data-tab="{{item.top === true ? 'top' : item.good === true ? 'good' : item.tab | tab}}">{{item.title}}</h2>
+                    <div class="summary">
+                        <img :src="item.author.avatar_url" />
+                        <div class="infobox">
+                            <p>
+                                <span class="authorname">{{item.author.loginname}}</span>
+                                <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
+                            </p>
+                            <p>
+                                <span>{{item.create_at | date }}</span>
+                                <span>{{item.last_reply_at | date }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </mt-loadmore>
     </div>
-    <mt-loadmore :top-method="loadTop">
-      <ul>
-        <li v-for="item in news">
-          <h1>{{item.title}}</h1>
-          <h1>{{item.title}}</h1>
-          <h1>{{item.title}}</h1>
-          <h1>{{item.title}}</h1>
-          <h1>{{item.title}}</h1>
-        </li>
-      </ul>
-    </mt-loadmore>
-    <!--
-    <div id="wrapper" class="news-container" :style="styleObj" @touchstart="handleStart" @touchmove="handleMove" @touchend="handleEnd">
-      <div class="loading-bar"></div>
-      <ul>
-        <li v-for="item in news">
-          <div class="news-item">
-            <div class="news-poster">
-            </div>
-            <div class="news-summary">
-              <h4 class="news-title">{{item.title}}</h4>
-              <span class="news-tag">{{item.tag}}</span>
-              <span class="news-comment">{{item.comment}}</span>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div> -->
-  </div>
 </template>
 
 <script>
-import { Loadmore } from 'mint-ui'
-
-export default {
-
-  data () {
-    return {
-      news: [{
-        title: 'React',
-        tag: 'Js',
-        comment: 23333
-      }, {
-        title: 'Vue.js Simple yet powerful.',
-        tag: 'Js',
-        comment: 99999
-      }, {
-        title: 'Angular hehe',
-        tag: 'Js',
-        comment: 12
-      }, {
-        title: 'Angular hehe',
-        tag: 'Js',
-        comment: 12
-      }, {
-        title: 'Angular hehe',
-        tag: 'Js',
-        comment: 12
-      }, {
-        title: 'Angular hehe',
-        tag: 'Js',
-        comment: 12
-      }],
-      startY: 0
+    import { Loadmore, Navbar, TabItem } from 'mint-ui'
+    export default {
+        components: { Loadmore, Navbar, TabItem },
+        data() {
+            return {
+                dataList: [],
+                page: 1,
+                pending: false
+            }
+        },
+        methods: {
+            loadTop(id) {
+                console.log('load top called')
+                if(!this.pending){
+                    this.page = 1
+                    this.pending = true
+                    this.getTopics()
+                        .then((res) => {
+                            this.dataList = res.json().data
+                            this.$broadcast('onTopLoaded', id);
+                            this.pending = false
+                        }, (err) => {
+                            console.log('err', err)
+                        })
+                }
+            },
+            loadBottom(id) {
+                if(!this.pending){
+                    console.log('loadBottom called')
+                    this.pending = true
+                    this.page += 1
+                    this.getTopics()
+                        .then((res) => {
+                            this.dataList = this.dataList.concat(res.json().data)
+                            this.$broadcast('onBottomLoaded', id)
+                            this.pending = false
+                        })
+                }
+            },
+            getTopics() {
+                return this.$http.get('/api/topics', {
+                    params: {
+                        page: this.page,
+                        tab: this.selected,
+                        limit: 10
+                    }
+                });
+            }
+        },
+        props: [{
+            'name': 'selected',
+            'default': 'all'
+        }],
+        ready() {
+            console.log('ready called')
+            this.getTopics()
+                .then((res) => {
+                    this.dataList = res.json().data
+                }, (err) => {
+                    console.log('err', err)
+                })
+        },
+        watch: {
+            selected() {
+                if(!this.pending){
+                    this.pending = true
+                    this.page = 1
+                    this.getTopics()
+                        .then((res) => {
+                            this.dataList = res.json().data
+                            this.pending = false
+                        })
+                }
+            }
+        },
+        filters: {
+            date(input){
+                return new Date(String(input)).getFullYear() + '/' + (new Date(String(input)).getMonth() + 1) + '/' + new Date(String(input)).getDate()
+            },
+            tab(input){
+                return {
+                    'top': '顶置',
+                    'good': '精华',
+                    'job': '招聘',
+                    'ask': '问答',
+                    'share': '分享'
+                }[input]
+            }
+        }
     }
-  },
-  methods: {
-    handleStart(e){
-      this.startY = e.touches[0].clientY
-    },
-    handleMove(e){
-      this.currentY = e.touches[0].clientY
-      console.log(this.currentY - this.startY)
-    },
-    handleEnd(e){
-
-    },
-    loadTop(id){
-      this.news.push({
-        title: 'Angular hehe',
-        tag: 'Js',
-        comment: 12
-      })
-      this.$broadcast('onTopLoaded', id);
-    }
-  }
-}
 </script>
 
 <style lang='less'>
-*{
-  margin: 0;
-  padding: 0;
-}
-html, body {
-  height: 100%;
-}
-
-.clx{
-  &:after{
-    content: '';
-    display: block;
-    clear: both;
-  }
-}
-
-#body{
-  background: #ccc;
-}
-
-header{
-  background: #ea4141;
-  padding: 5px 4px;
-  color: #fff;
-  font-size: 20px;
-  position: relative;
-  z-index: 200;
-}
-
-.tabs-bar{
-  position: relative;
-  ul{
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    background: #fff;
-    li{
-      float: left;
-      padding: 10px 15px;
-      font-size: 18px;
-      &.active{
-        color: #ea4141;
-        border-bottom: 2px solid #ea4141;
-      }
+    *{
+      margin: 0;
+      padding: 0;
     }
-  }
-}
-
+    html, body {
+      height: 100%;
+    }
+    .cell{
+        padding: 10px 15px;
+    }
+    .cell-title{
+        font-size: 16px;
+        color: #2c3e50;
+        line-height: 1.5;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-weight: 800;
+        font-family: "Helvetica-Neue", "Helvetica", Arial, sans-serif;
+        &:before{
+            min-width: 24px;
+            text-align: center;
+            padding: 3px 8px;
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 12px;
+            content: attr(data-tab);
+            color: #fff;
+            font-weight: 400;
+            vertical-align: middle;
+        }
+        &.share{
+            &:before{
+                background: #FBCA04
+            }
+        }
+        &.ask{
+            &:before{
+                background: #26a2ff;
+            }
+        }
+        &.job{
+            &:before{
+                background: #AE81FF;
+            }
+        }
+        &.good{
+            &:before{
+                background: #41B883;
+            }
+        }
+        &.top{
+            &:before{
+                background: #BD2C00;
+            }
+        }
+    }
+    .summary{
+        padding-top: 10px;
+        display: flex;
+        img{
+            height: 40px;
+            width: 40px;
+        }
+        .infobox{
+            width: 100%;
+            padding-left: 4px;
+            p{
+                padding: 4px 0;
+                font-size: 14px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .visitnum b{
+                color: #26a2ff;
+                font-weight: 800;
+            }
+        }
+    }
+    .tag{
+        background: #26A2FF;
+        color: #fff;
+        padding: 2px 4px;
+    }
 </style>
