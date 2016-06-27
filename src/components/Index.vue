@@ -26,7 +26,7 @@
                 })
                 setTimeout(() => {
                     Indicator.close()
-                    this.$route.router.go('list')
+                    this.$route.router.go('topic')
                 }, 2000)
             }
         },

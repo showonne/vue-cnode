@@ -1,6 +1,6 @@
 <template>
     <mt-header>
-        <mt-button v-link="{name: 'list'}" icon="back" slot="left">返回</mt-button>
+        <mt-button v-link="{name: 'topic'}" icon="back" slot="left">返回</mt-button>
         <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
     <div class="body">

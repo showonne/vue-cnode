@@ -19,10 +19,10 @@ router.map({
             require(['./components/Index.vue'], resolve)
         }
     },
-    '/list': {
-        name: 'list',
+    '/topic': {
+        name: 'topic',
         component: (resolve) => {
-            require(['./components/List.vue'], resolve)
+            require(['./components/Topic.vue'], resolve)
         }
     },
     '/detail/:id': {
