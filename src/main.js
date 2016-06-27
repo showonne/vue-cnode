@@ -14,9 +14,9 @@ const router = new VueRouter()
 
 router.map({
     '/': {
-        name: 'index',
+        name: 'welcom',
         component: (resolve) => {
-            require(['./components/Index.vue'], resolve)
+            require(['./components/Welcom.vue'], resolve)
         }
     },
     '/topic': {
@@ -30,9 +30,33 @@ router.map({
         component: (resolve) => {
             require(['./components/Detail.vue'], resolve)
         }
+    },
+    '/about': {
+        name: 'about',
+        component: (resolve) => {
+            require(['./components/About.vue'], resolve)
+        }
+    },
+    'login': {
+        name: 'login',
+        component: (resolve) => {
+            require(['./components/Login.vue'], resolve)
+        }
     }
 })
 
-const App = Vue.extend({})
+const noValidationArr = ['/', '/topic', '/detail', '/about', '/login']
+
+router.beforeEach((transition) => {
+    if(noValidationArr.findIndex((v) => { return v === transition.to.path }) === -1){
+        console.log('need auth')
+        router.go('/login')
+    }else{
+        console.log('passed~')
+        transition.next()
+    }
+})
+
+import App from './components/App.vue'
 
 router.start(App, '#app')

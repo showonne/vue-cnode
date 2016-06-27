@@ -28,13 +28,15 @@
                 </li>
             </ul>
         </mt-loadmore>
+
     </div>
+
 </template>
 
 <script>
-    import { Loadmore, Navbar, TabItem, Indicator } from 'mint-ui'
+    import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
     export default {
-        components: { Loadmore, Navbar, TabItem },
+        components: { Loadmore, Navbar, TabItem, Tabbar },
         data() {
             return {
                 dataList: [],
@@ -137,6 +139,15 @@
 </script>
 
 <style lang='less'>
+    #body{
+        padding-bottom: 30px;
+    }
+    .fix-bottom{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
     .shadow-line{
         height: 3px;
         width: 100%;
