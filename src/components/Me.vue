@@ -83,10 +83,14 @@
     .card{
         display: flex;
         flex-flow: column;
-        padding-top: 20px;
         .card-item{
             display: flex;
             align-items: flex-end;
+            &:first-child{
+                padding: 6px;
+                box-shadow: 0px 1px 5px #aaa;
+                margin: 10px 2px 4px;
+            }
         }
         .card-button{
             height: 40px;
@@ -100,6 +104,7 @@
     .avatar-photo{
         height: 75px;
         width: 75px;
+        border-radius: 50%;
     }
     .loginname{
         font-size: 24px;
