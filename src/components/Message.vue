@@ -62,48 +62,6 @@
                 this.has_read_messages = res.json().data.has_read_messages
                 this.hasnot_read_messages = res.json().data.hasnot_read_messages
                 console.log(res.json().data)
-                //mock
-                this.has_read_messages = [
-                  {
-                    id: "543fb7abae523bbc80412b26",
-                    type: "at",
-                    has_read: true,
-                    author: {
-                      loginname: "alsotang",
-                      avatar_url: "https://avatars.githubusercontent.com/u/1147375?v=2"
-                    },
-                    topic: {
-                      id: "542d6ecb9ecb3db94b2b3d0f",
-                      title: "adfadfadfasdf",
-                      last_reply_at: "2014-10-18T07:47:22.563Z"
-                    },
-                    reply: {
-                      id: "543fb7abae523bbc80412b24",
-                      content: "<a href=''>@alsotang</a> 哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
-                      ups: [ ],
-                      create_at: "2014-10-16T12:18:51.566Z"
-                      }
-                  }, {
-                    id: "543fb7abae523bbc80412b27",
-                    type: "at",
-                    has_read: true,
-                    author: {
-                      loginname: "alsotang",
-                      avatar_url: "https://avatars.githubusercontent.com/u/1147375?v=2"
-                    },
-                    topic: {
-                      id: "542d6ecb9ecb3db94b2b3d0f",
-                      title: "adfadfadfasdf",
-                      last_reply_at: "2014-10-18T07:47:22.563Z"
-                    },
-                    reply: {
-                      id: "543fb7abae523bbc80412b24",
-                      content: "<a href=''>@alsotang</a> 哈哈",
-                      ups: [ ],
-                      create_at: "2014-10-16T12:18:51.566Z"
-                      }
-                    }
-                ]
                 this.chTab('has_read')
             })
         }

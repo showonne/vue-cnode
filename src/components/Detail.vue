@@ -27,7 +27,7 @@
                     <div class="changes">
                         <span class="create_at">{{reply.create_at | date}}</span>
                         <div class="operation">
-                            <a class="up">{{reply.ups.length}} 赞</a>
+                            <a :class="['up', {uped: uped(reply.ups)}]" @click="up(reply)">{{reply.ups.length}} 赞</a>
                             <a class="reply">回复</a>
                         </div>
                     </div>
@@ -62,6 +62,38 @@
         methods: {
             back() {
                 window.history.back()
+            },
+            up(reply) {
+                if(localStorage.id){
+                    console.log(reply)
+                    if(reply.ups.findIndex((v) => { return v === localStorage.id}) === -1){
+                        this.$http.post(`api/reply/${reply.id}/ups`, {
+                            accesstoken: localStorage.accesstoken,
+                            action: 'up'
+                        })
+                        .then((res) => {
+                            reply.ups.push(localStorage.id)
+                        })
+                    }else{
+                        this.$http.post(`api/reply/${reply.id}/ups`, {
+                            accesstoken: localStorage.accesstoken,
+                            action: 'down'
+                        })
+                        .then((res) => {
+                            let index = reply.ups.findIndex((v) => {return v === localStorage.id})
+                            reply.ups.splice(index, 1)
+                        })
+                    }
+                }
+            },
+            uped(ups) {
+                if(localStorage.id){
+                    if(ups.findIndex((v) => { return v === localStorage.id }) === -1){
+                        return false
+                    }else{
+                        return true
+                    }
+                }
             }
         },
         ready() {
@@ -174,8 +206,11 @@
             font-size: 14px;
             color: #fff;
             .up{
-                background: #30dd92;
+                background: #d13434;
                 padding: 2px 5px;
+            }
+            .uped{
+                background: #41B883;
             }
             .create_at{
                 color: #777;
