@@ -42,17 +42,27 @@ router.map({
         component: (resolve) => {
             require(['./components/Login.vue'], resolve)
         }
+    },
+    'me': {
+        name: 'me',
+        component: (resolve) => {
+            require(['./components/Me.vue'], resolve)
+        },
+        auth: true
     }
 })
 
-const noValidationArr = ['/', '/topic', '/detail', '/about', '/login']
-
 router.beforeEach((transition) => {
-    if(noValidationArr.findIndex((v) => { return v === transition.to.path }) === -1){
+    if(transition.to.auth){
         console.log('need auth')
-        router.go('/login')
+        if(localStorage.id){
+            transition.next()
+        }else{
+            let backUrl = encodeURIComponent(transition.to.path)
+            transition.redirect(`/login?backUrl=${backUrl}`)
+        }
     }else{
-        console.log('passed~')
+        console.log('passed')
         transition.next()
     }
 })
