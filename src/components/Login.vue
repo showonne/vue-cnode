@@ -22,6 +22,7 @@
                     let resJson = res.json()
                     localStorage.loginname = resJson.loginname
                     localStorage.avatar_url = resJson.avatar_url
+                    localStorage.accesstoken = this.tocken
                     localStorage.id = resJson.id
                     let backUrl = decodeURIComponent(this.$route.query.backUrl)
                     this.$route.router.go(backUrl)

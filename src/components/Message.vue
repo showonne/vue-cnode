@@ -1,0 +1,182 @@
+<template>
+    <div>
+        <ul class="tab">
+            <li @click="chTab('has_read')" :class="{selected: cTab === 'has_read'}">已读</li>
+            <li @click="chTab('hasnot_read')" :class="{selected: cTab === 'hasnot_read'}">未读</li>
+        </ul>
+        <ul class="message-list">
+            <li v-for="message in current_display_message">
+                <div class="list-item" @click="showContent(message.id)">
+                    <div class="item-left">
+                        <img :src="message.author.avatar_url" />
+                        <span v-text="message.author.loginname"></span>
+                    </div>
+                    <div class="item-right">
+                        <h4 v-text="message.topic.title"></h4>
+                        <span v-text="message.topic.last_reply_at | date"></span>
+                    </div>
+                </div>
+                <div class="content" v-if="message.id === currentId" transition="fade">
+                    {{{message.reply.content}}}
+                </div>
+            </li>
+        </ul>
+    </div>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                'has_read_messages': [],
+                'hasnot_read_messages': [],
+                'current_display_message': [],
+                'cTab': 'has_read',
+                'currentId': ''
+            }
+        },
+        methods: {
+            chTab(selected) {
+                if(selected === 'has_read'){
+                    this.current_display_message = this.has_read_messages
+                }else{
+                    this.current_display_message = this.hasnot_read_messages
+                }
+                this.cTab = selected
+            },
+            showContent(id) {
+                if(id === this.currentId){
+                    this.currentId = ''
+                }else{
+                    this.currentId = id
+                }
+            }
+        },
+        ready() {
+            this.$http.get('/api/messages', {
+                params: {
+                    accesstoken: localStorage.accesstoken
+                }
+            })
+            .then((res) => {
+                this.has_read_messages = res.json().data.has_read_messages
+                this.hasnot_read_messages = res.json().data.hasnot_read_messages
+                console.log(res.json().data)
+                //mock
+                this.has_read_messages = [
+                  {
+                    id: "543fb7abae523bbc80412b26",
+                    type: "at",
+                    has_read: true,
+                    author: {
+                      loginname: "alsotang",
+                      avatar_url: "https://avatars.githubusercontent.com/u/1147375?v=2"
+                    },
+                    topic: {
+                      id: "542d6ecb9ecb3db94b2b3d0f",
+                      title: "adfadfadfasdf",
+                      last_reply_at: "2014-10-18T07:47:22.563Z"
+                    },
+                    reply: {
+                      id: "543fb7abae523bbc80412b24",
+                      content: "<a href=''>@alsotang</a> 哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
+                      ups: [ ],
+                      create_at: "2014-10-16T12:18:51.566Z"
+                      }
+                  }, {
+                    id: "543fb7abae523bbc80412b27",
+                    type: "at",
+                    has_read: true,
+                    author: {
+                      loginname: "alsotang",
+                      avatar_url: "https://avatars.githubusercontent.com/u/1147375?v=2"
+                    },
+                    topic: {
+                      id: "542d6ecb9ecb3db94b2b3d0f",
+                      title: "adfadfadfasdf",
+                      last_reply_at: "2014-10-18T07:47:22.563Z"
+                    },
+                    reply: {
+                      id: "543fb7abae523bbc80412b24",
+                      content: "<a href=''>@alsotang</a> 哈哈",
+                      ups: [ ],
+                      create_at: "2014-10-16T12:18:51.566Z"
+                      }
+                    }
+                ]
+                this.chTab('has_read')
+            })
+        }
+    }
+</script>
+
+<style lang='less' scoped>
+    .tab{
+        height: 40px;
+        display: flex;
+        list-style: none;
+        li{
+            flex: 1;
+            text-align: center;
+            padding-top: 10px;
+            font-size: 18px;
+            font-weight: 800;
+            &:first-child{
+                border-right: 1px solid #ccc;
+            }
+            &.selected{
+                background: #26a2ff;
+                color: #fff;
+                border-bottom: 1px solid #26a2ff;
+            }
+        }
+    }
+    .content{
+        padding: 10px;
+        line-height: 1.4;
+        border-bottom: 1px dashed #26a2ff;
+    }
+    .fade-transition{
+        transition: all .1s ease;
+        opacity: 1;
+    }
+    .fade-leave, .fade-enter{
+        opacity: 0;
+    }
+    .message-list{
+        border-top: 1px solid #ccc;
+    }
+    .list-item{
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+    .item-left{
+        flex: 2;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-around;
+        img{
+            height: 40px;
+            width: 40px;
+            margin: 0 auto;
+            padding: 4px 0;
+        }
+        span{
+            text-align: center;
+        }
+    }
+    .item-right{
+        flex: 7;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+        h4{
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+    }
+</style>

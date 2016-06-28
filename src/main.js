@@ -10,6 +10,12 @@ Vue.use(MintUI)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
+import filters from './filters.js'
+
+Object.keys(filters).forEach((key) => {
+    Vue.filter(key, filters[key])
+})
+
 const router = new VueRouter()
 
 router.map({
@@ -47,6 +53,13 @@ router.map({
         name: 'me',
         component: (resolve) => {
             require(['./components/Me.vue'], resolve)
+        },
+        auth: true
+    },
+    'message': {
+        name: 'message',
+        component: (resolve) => {
+            require(['./components/Message.vue'], resolve)
         },
         auth: true
     }

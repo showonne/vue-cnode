@@ -37,6 +37,9 @@
             'channel': function(val) {
                 this.$route.router.go(`${this.channel}`)
             }
+        },
+        ready() {
+            this.channel = this.$route.path.slice(1)
         }
     }
 </script>

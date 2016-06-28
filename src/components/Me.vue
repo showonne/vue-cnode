@@ -4,7 +4,7 @@
             <div class="card-item">
                 <img class="avatar-photo" :src="userInfo.avatar_url"  />
                 <span class="loginname" v-text="userInfo.loginname"></span>
-                <span class="create_at" v-text="userInfo.create_at"></span>
+                <span class="create_at" v-text="userInfo.create_at | date"></span>
             </div>
             <div class="card-item card-button">
                 <span>积分:<b v-text="userInfo.score"></b></span>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="item-right">
                         <h4 v-text="item.title"></h4>
-                        <span v-text="item.last_reply_at"></span>
+                        <span v-text="item.last_reply_at | date"></span>
                     </div>
                 </div>
             </li>
@@ -105,6 +105,12 @@
         font-size: 24px;
         font-weight: 800;
         font-family: 'Microsoft YaHei';
+        flex: 2;
+        text-align: center;
+    }
+    .create_at{
+        flex: 1;
+        text-align: center;
     }
     .tab{
         height: 40px;
@@ -121,7 +127,9 @@
                 border-right: 1px solid #ccc;
             }
             &.selected{
-                border-bottom: 3px solid #26a2ff;
+                background: #26a2ff;
+                color: #fff;
+                border-bottom: 1px solid #26a2ff;
             }
         }
     }
