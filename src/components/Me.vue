@@ -12,19 +12,19 @@
             </div>
         </div>
         <ul class="tab">
-            <li>最近回复</li>
-            <li>最近发表</li>
+            <li @click="chTab('reply')" :class="{selected: cTab === 'reply'}">最近回复</li>
+            <li @click="chTab('topic')" :class="{selected: cTab === 'topic'}">最近发表</li>
         </ul>
         <ul class="tab-list">
-            <li v-for='reply in userInfo.recent_replies'>
-                <div class="reply-item">
+            <li v-for="item in dataSet">
+                <div class="list-item" @click="seeDetail(item.id)">
                     <div class="item-left">
-                        <img :src="reply.author.avatar_url" />
-                        <span v-text="reply.author.loginname"></span>
+                        <img :src="item.author.avatar_url" />
+                        <span v-text="item.author.loginname"></span>
                     </div>
                     <div class="item-right">
-                        <h4 v-text="reply.title"></h4>
-                        <span v-text="reply.last_reply_at"></span>
+                        <h4 v-text="item.title"></h4>
+                        <span v-text="item.last_reply_at"></span>
                     </div>
                 </div>
             </li>
@@ -45,7 +45,23 @@
                     'recent_replies': [],
                     'recent_topics': [],
                     'score': ''
+                },
+                'cTab': 'reply',
+                'dataSet': []
+            }
+        },
+        methods: {
+            chTab(selected) {
+                console.log(selected)
+                if(selected === 'reply'){
+                    this.dataSet = this.userInfo.recent_replies
+                }else{
+                    this.dataSet = this.userInfo.recent_topics
                 }
+                this.cTab = selected
+            },
+            seeDetail(id) {
+                this.$route.router.go(`/detail/${id}`)
             }
         },
         ready() {
@@ -54,6 +70,7 @@
                 .then((res) => {
                     this.userInfo = res.json().data
                     console.log(res.json().data)
+                    this.chTab('reply')
                 })
         }
     }
@@ -103,12 +120,15 @@
             &:first-child{
                 border-right: 1px solid #ccc;
             }
+            &.selected{
+                border-bottom: 3px solid #26a2ff;
+            }
         }
     }
     .tab-list{
         border-top: 1px solid #ccc;
     }
-    .reply-item{
+    .list-item{
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
