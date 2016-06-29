@@ -4,11 +4,11 @@
             <div class="card-item">
                 <img class="avatar-photo" :src="userInfo.avatar_url"  />
                 <span class="loginname" v-text="userInfo.loginname"></span>
-                <span class="create_at" v-text="userInfo.create_at | date"></span>
+                <span class="create_at">{{userInfo.create_at | date}} created.</span>
             </div>
             <div class="card-item card-button">
-                <span>积分:<b v-text="userInfo.score"></b></span>
-                <span>GitHub: <a>{{userInfo.githubUsername}}</a></span>
+                <span class="score">积分:<b v-text="userInfo.score"></b></span>
+                <span class="github"><img class="icon-github" src="../assets/github.png" /><a target="blank" :href="'https://www.github.com/' + userInfo.githubUsername">{{userInfo.githubUsername}}</a></span>
             </div>
         </div>
         <ul class="tab">
@@ -64,6 +64,7 @@
         route: {
             data(transition) {
                 let loginname = transition.to.params.loginname
+                console.log(loginname)
                 this.$http.get(`/api/user/${loginname}`)
                     .then((res) => {
                         this.userInfo = res.json().data
@@ -92,12 +93,30 @@
         }
         .card-button{
             height: 40px;
-            border: 1px solid #ccc;
-            margin-top: 2px;
+            box-shadow: 0 1px 5px #aaa;
+            margin: 2px;
             font-size: 18px;
             align-items: center;
             justify-content: space-around;
         }
+    }
+    .score{
+        flex: 1;
+        text-align: center;
+    }
+    .github{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        a{
+            flex: 4;
+            padding-left: 10px;
+        }
+    }
+    .icon-github{
+        flex: 1;
+        height: 32px;
+        width: 32px;
     }
     .avatar-photo{
         height: 75px;
@@ -114,12 +133,13 @@
     .create_at{
         flex: 1;
         text-align: center;
+        color: #5A5EBC;
     }
     .tab{
         height: 40px;
         display: flex;
         list-style: none;
-        margin-top: 4px;
+        margin: 4px 2px 0;
         li{
             flex: 1;
             text-align: center;

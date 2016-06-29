@@ -10,6 +10,8 @@ Vue.use(MintUI)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 
+Vue.config.debug = true
+
 import filters from './filters.js'
 
 Object.keys(filters).forEach((key) => {

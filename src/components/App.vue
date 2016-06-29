@@ -24,18 +24,19 @@
     import { TabItem, Tabbar } from 'mint-ui'
     export default {
         components: { TabItem, Tabbar },
-        props: [{
-            name: 'channel',
-            default: 'topic'
-        }],
         computed: {
             isWelcom() {
                 return this.$route.path === '/' || this.$route.path === '/login'
             }
         },
+        data() {
+            return {
+                channel: this.$route.path.slice(1)
+            }
+        },
         watch: {
-            'channel': function() {
-                console.log(this.channel)
+            'channel': function(val) {
+                console.log('watched', val)
                 if(this.channel === 'user'){
                     this.$route.router.go({
                         name: 'user',

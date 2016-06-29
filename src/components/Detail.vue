@@ -40,7 +40,7 @@
                     </div>
                 </li>
             </ul>
-            <div class="reply-box">
+            <div class="reply-box" v-if="isLogin">
                 <textarea v-model="replyMsg"></textarea>
                 <button type="button" @click="reply">回复</button>
             </div>
@@ -51,7 +51,7 @@
 <script>
     import { Header, Indicator, MessageBox, Toast } from 'mint-ui'
     export default {
-        components: [ Header, Indicator, MessageBox, Toast ],
+        components: { 'mtHeader': { Header }, Indicator, MessageBox, Toast },
         data() {
             return {
                 content: {
@@ -72,10 +72,20 @@
                 currentId: ''
             }
         },
+        computed: {
+            'isLogin': function(){
+                return localStorage.id === undefined ? false : true
+            }
+        },
         methods: {
             replyTo(toId, toName) {
-                this.currentId = toId
-                this.replyToMsg = `@${toName} `
+                if(localStorage.id){
+                    this.currentId = toId
+                    this.replyToMsg = `@${toName} `
+                }else{
+                    this.$route.router.go({name: 'login'})
+                }
+
             },
             addReplyTo(toId, toName){
                 this.currentId = toId
@@ -157,6 +167,8 @@
                             Indicator.close()
                         })
                     }
+                }else{
+                    this.$route.router.go({name: 'login'})
                 }
             },
             uped(ups) {
