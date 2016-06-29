@@ -23,7 +23,10 @@
 <script>
     import { TabItem, Tabbar } from 'mint-ui'
     export default {
-        components: { TabItem, Tabbar },
+        components: {
+            'mt-tab-item': TabItem,
+            'mt-tabbar': Tabbar
+        },
         computed: {
             isWelcom() {
                 return this.$route.path === '/' || this.$route.path === '/login'
@@ -31,7 +34,7 @@
         },
         data() {
             return {
-                channel: this.$route.path.slice(1)
+                channel: this.$route.path.split('/')[1]
             }
         },
         watch: {

@@ -1,12 +1,12 @@
 import Vue from 'vue'
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
+//import MintUI from 'mint-ui'
+//import 'mint-ui/lib/style.css'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 
 require('./assets/less/global.less')
 
-Vue.use(MintUI)
+// Vue.use(MintUI)
 Vue.use(VueResource)
 Vue.use(VueRouter)
 

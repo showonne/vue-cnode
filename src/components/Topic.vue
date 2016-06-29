@@ -36,7 +36,12 @@
 <script>
     import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
     export default {
-        components: { Loadmore, Navbar, TabItem, Tabbar },
+        components: {
+            'mt-loadmore': Loadmore,
+            'mt-navbar': Navbar,
+            'mt-tab-item': TabItem,
+            'mt-tabbar': Tabbar
+        },
         data() {
             return {
                 dataList: [],

@@ -33,7 +33,6 @@
 </template>
 
 <script>
-    import { Tabbar, TabItem } from 'mint-ui'
     export default {
         data() {
             return {

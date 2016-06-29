@@ -8,7 +8,10 @@
 <script>
     import { Field, Button } from 'mint-ui'
     export default {
-        components: { Field, Button },
+        components: {
+            'mt-field': Field,
+            'mt-button': Button
+        },
         props: [{
             name: 'tocken',
             default: ''

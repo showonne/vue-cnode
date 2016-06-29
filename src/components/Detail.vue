@@ -51,7 +51,9 @@
 <script>
     import { Header, Indicator, MessageBox, Toast } from 'mint-ui'
     export default {
-        components: { 'mtHeader': { Header }, Indicator, MessageBox, Toast },
+        components: {
+            'mt-header': Header
+        },
         data() {
             return {
                 content: {
