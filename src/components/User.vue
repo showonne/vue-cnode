@@ -52,7 +52,6 @@
         },
         methods: {
             chTab(selected) {
-                console.log(selected)
                 if(selected === 'reply'){
                     this.dataSet = this.userInfo.recent_replies
                 }else{
@@ -64,7 +63,6 @@
         route: {
             data(transition) {
                 let loginname = transition.to.params.loginname
-                console.log(loginname)
                 this.$http.get(`/api/user/${loginname}`)
                     .then((res) => {
                         this.userInfo = res.json().data

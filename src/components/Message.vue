@@ -61,7 +61,6 @@
             .then((res) => {
                 this.has_read_messages = res.json().data.has_read_messages
                 this.hasnot_read_messages = res.json().data.hasnot_read_messages
-                console.log(res.json().data)
                 this.chTab('has_read')
             })
         }

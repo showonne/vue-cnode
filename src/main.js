@@ -69,7 +69,6 @@ router.map({
 
 router.beforeEach((transition) => {
     if(transition.to.auth){
-        console.log('need auth')
         if(localStorage.id){
             transition.next()
         }else{
@@ -77,7 +76,6 @@ router.beforeEach((transition) => {
             transition.redirect(`/login?backUrl=${backUrl}`)
         }
     }else{
-        console.log('passed')
         transition.next()
     }
 })

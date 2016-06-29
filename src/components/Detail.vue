@@ -141,7 +141,6 @@
             },
             up(reply) {
                 if(localStorage.id){
-                    console.log(reply)
                     if(reply.ups.findIndex((v) => { return v === localStorage.id}) === -1){
                         Indicator.open('执行中...')
                         this.$http.post(`api/reply/${reply.id}/ups`, {

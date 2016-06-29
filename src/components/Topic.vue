@@ -45,7 +45,6 @@
         },
         methods: {
             loadTop(id) {
-                console.log('load top called')
                 this.page = 1
                 this.getTopics()
                     .then((res) => {
@@ -85,7 +84,6 @@
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
-                    console.log(res.json().data)
                     Indicator.close()
                 }, (err) => {
                     console.log('err', err)
