@@ -26,24 +26,32 @@
                             <span class="loginname">{{reply.author.loginname}}</span>
                         </div>
                         <div class="changes">
-                            <span class="create_at">{{reply.create_at | date}}</span>
+                            <span class="create_at">{{reply.create_at | date 'ago'}}</span>
                             <div class="operation">
                                 <a :class="['up', {uped: uped(reply.ups)}]" @click="up(reply)">{{reply.ups.length}} 赞</a>
-                                <a class="reply">回复</a>
+                                <a class="reply" @click="replyTo(reply.id, reply.author.loginname)">回复</a>
                             </div>
                         </div>
                     </div>
                     {{{reply.content}}}
+                    <div class="reply-box" v-if="reply.id === currentId">
+                        <textarea v-model="replyToMsg"></textarea>
+                        <button type="button" @click="addReplyTo(reply.id, reply.author.loginname)">回复</button>
+                    </div>
                 </li>
             </ul>
+            <div class="reply-box">
+                <textarea v-model="replyMsg"></textarea>
+                <button type="button" @click="reply">回复</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { Header, Indicator, MessageBox } from 'mint-ui'
+    import { Header, Indicator, MessageBox, Toast } from 'mint-ui'
     export default {
-        components: [ Header, Indicator, MessageBox ],
+        components: [ Header, Indicator, MessageBox, Toast ],
         data() {
             return {
                 content: {
@@ -58,10 +66,66 @@
                         },
                         ups: []
                     }]
-                }
+                },
+                replyMsg: '',
+                replyToMsg: '',
+                currentId: ''
             }
         },
         methods: {
+            replyTo(toId, toName) {
+                this.currentId = toId
+                this.replyToMsg = `@${toName} `
+            },
+            addReplyTo(toId, toName){
+                this.currentId = toId
+                let topic_id = this.$route.params.id
+                let accesstoken = localStorage.accesstoken
+                let reply_id = toId
+                this.$http.post(`/api/topic/${topic_id}/replies`, {
+                    accesstoken: accesstoken,
+                    content: this.replyToMsg,
+                    reply_id: toId
+                })
+                .then((res) => {
+                    Toast('回复成功~')
+                    this.content.replies.push({
+                        author: {
+                            avatar_url: localStorage.avatar_url,
+                            loginname: localStorage.loginname
+                        },
+                        ups: [],
+                        reply_id: toId,
+                        content: this.replyToMsg,
+                        id: res.json().reply_id,
+                        create_at: new Date()
+                    })
+                })
+            },
+            reply() {
+                let topic_id = this.$route.params.id
+                let content = this.replyMsg
+                let accesstoken = localStorage.accesstoken
+                this.$http.post(`/api/topic/${topic_id}/replies`, {
+                    accesstoken: accesstoken,
+                    content: content
+                })
+                .then((res) => {
+                    Toast('回复成功~')
+                    this.content.replies.push({
+                        author: {
+                            avatar_url: localStorage.avatar_url,
+                            loginname: localStorage.loginname
+                        },
+                        ups: [],
+                        reply_id: null,
+                        content: content,
+                        id: localStorage.id,
+                        create_at: new Date()
+                    })
+                    this.replyMsg = ''
+                })
+            },
             back() {
                 window.history.back()
             },
@@ -69,16 +133,20 @@
                 if(localStorage.id){
                     console.log(reply)
                     if(reply.ups.findIndex((v) => { return v === localStorage.id}) === -1){
+                        Indicator.open('执行中...')
                         this.$http.post(`api/reply/${reply.id}/ups`, {
                             accesstoken: localStorage.accesstoken,
                             action: 'up'
                         })
                         .then((res) => {
                             reply.ups.push(localStorage.id)
+                            Indicator.close()
                         }, (err) => {
                             MessageBox.alert(err.json().error_msg, '操作失败')
+                            Indicator.close()
                         })
                     }else{
+                        Indicator.open('执行中...')
                         this.$http.post(`api/reply/${reply.id}/ups`, {
                             accesstoken: localStorage.accesstoken,
                             action: 'down'
@@ -86,6 +154,7 @@
                         .then((res) => {
                             let index = reply.ups.findIndex((v) => {return v === localStorage.id})
                             reply.ups.splice(index, 1)
+                            Indicator.close()
                         })
                     }
                 }
@@ -116,7 +185,7 @@
 
 <style lang='less'>
     .root{
-        padding-bottom: 30px;
+        padding-bottom: 40px;
     }
     .body{
         padding: 10px 10px;
@@ -245,6 +314,25 @@
                 height: 40px;
                 width: 40px;
             }
+        }
+    }
+    .reply-box{
+        border: 1px solid rgb(124, 197, 190);
+        margin-top: 10px;
+        padding: 4px;
+        textarea{
+            width: 100%;
+            height: 60px;
+            outline: none;
+            border: none;
+        }
+        button{
+            outline: none;
+            height: 40px;
+            width: 100%;
+            border: none;
+            background: rgb(124, 197, 190);
+            color: #fff;
         }
     }
 </style>
