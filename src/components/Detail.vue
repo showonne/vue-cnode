@@ -41,9 +41,9 @@
 </template>
 
 <script>
-    import { Header, Indicator } from 'mint-ui'
+    import { Header, Indicator, MessageBox } from 'mint-ui'
     export default {
-        components: [ Header ],
+        components: [ Header, Indicator, MessageBox ],
         data() {
             return {
                 content: {
@@ -75,6 +75,8 @@
                         })
                         .then((res) => {
                             reply.ups.push(localStorage.id)
+                        }, (err) => {
+                            MessageBox.alert(err.json().error_msg, '操作失败')
                         })
                     }else{
                         this.$http.post(`api/reply/${reply.id}/ups`, {
