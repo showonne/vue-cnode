@@ -1,40 +1,42 @@
 <template>
-    <mt-header>
-        <mt-button @click="back" icon="back" slot="left">返回</mt-button>
-    </mt-header>
-    <div class="body">
-        <h1 class="title">{{content.title}}</h1>
-        <div class="summary">
-            <div class="author">
-                <img :src="content.author.avatar_url" />
-                <span>{{content.author.loginname}}</span>
+    <div class="root">
+        <mt-header>
+            <mt-button @click="back" icon="back" slot="left">返回</mt-button>
+        </mt-header>
+        <div class="body">
+            <h1 class="title">{{content.title}}</h1>
+            <div class="summary">
+                <div class="author">
+                    <img :src="content.author.avatar_url" />
+                    <span>{{content.author.loginname}}</span>
+                </div>
+                <div class="changes">
+                    <span>{{content.create_at | date}}发布</span>
+                    <span>|</span>
+                    <span>{{content.visit_count}}人浏览过</span>
+                </div>
             </div>
-            <div class="changes">
-                <span>{{content.create_at | date}}发布</span>
-                <span>|</span>
-                <span>{{content.visit_count}}人浏览过</span>
-            </div>
-        </div>
-        {{{content.content}}}
-        <hr>
-        <ul class="reply-list">
-            <li v-for="reply in content.replies">
-                <div class="reply-info">
-                    <div>
-                        <img :src="reply.author.avatar_url" />
-                        <span class="loginname">{{reply.author.loginname}}</span>
-                    </div>
-                    <div class="changes">
-                        <span class="create_at">{{reply.create_at | date}}</span>
-                        <div class="operation">
-                            <a :class="['up', {uped: uped(reply.ups)}]" @click="up(reply)">{{reply.ups.length}} 赞</a>
-                            <a class="reply">回复</a>
+            {{{content.content}}}
+            <hr>
+            <ul class="reply-list">
+                <li v-for="reply in content.replies">
+                    <div class="reply-info">
+                        <div>
+                            <img :src="reply.author.avatar_url" />
+                            <span class="loginname">{{reply.author.loginname}}</span>
+                        </div>
+                        <div class="changes">
+                            <span class="create_at">{{reply.create_at | date}}</span>
+                            <div class="operation">
+                                <a :class="['up', {uped: uped(reply.ups)}]" @click="up(reply)">{{reply.ups.length}} 赞</a>
+                                <a class="reply">回复</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {{{reply.content}}}
-            </li>
-        </ul>
+                    {{{reply.content}}}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -111,6 +113,9 @@
 </script>
 
 <style lang='less'>
+    .root{
+        padding-bottom: 30px;
+    }
     .body{
         padding: 10px 10px;
     }

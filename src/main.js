@@ -43,20 +43,20 @@ router.map({
             require(['./components/About.vue'], resolve)
         }
     },
-    'login': {
+    '/login': {
         name: 'login',
         component: (resolve) => {
             require(['./components/Login.vue'], resolve)
         }
     },
-    'me': {
-        name: 'me',
+    '/user/:loginname': {
+        name: 'user',
         component: (resolve) => {
-            require(['./components/Me.vue'], resolve)
+            require(['./components/User.vue'], resolve)
         },
         auth: true
     },
-    'message': {
+    '/message': {
         name: 'message',
         component: (resolve) => {
             require(['./components/Message.vue'], resolve)

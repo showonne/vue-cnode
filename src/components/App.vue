@@ -9,7 +9,7 @@
                 <mt-tab-item id="message">
                     消息
                 </mt-tab-item>
-                <mt-tab-item id="me">
+                <mt-tab-item id="user">
                     我的
                 </mt-tab-item>
                 <mt-tab-item id="about">
@@ -34,12 +34,30 @@
             }
         },
         watch: {
-            'channel': function(val) {
-                this.$route.router.go(`${this.channel}`)
+            'channel': function() {
+                console.log(this.channel)
+                if(this.channel === 'user'){
+                    this.$route.router.go({
+                        name: 'user',
+                        params: {
+                            loginname: localStorage.loginname
+                        }
+                    })
+                }else{
+                    this.$route.router.go({
+                        name: this.channel
+                    })
+                }
             }
-        },
-        ready() {
-            this.channel = this.$route.path.slice(1)
         }
     }
 </script>
+
+<style>
+    .fix-bottom{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+</style>

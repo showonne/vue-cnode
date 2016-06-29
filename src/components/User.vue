@@ -17,12 +17,12 @@
         </ul>
         <ul class="tab-list">
             <li v-for="item in dataSet">
-                <div class="list-item" @click="seeDetail(item.id)">
-                    <div class="item-left">
+                <div class="list-item">
+                    <div class="item-left" v-link="{name:'user', params:{loginname: item.author.loginname}}">
                         <img :src="item.author.avatar_url" />
                         <span v-text="item.author.loginname"></span>
                     </div>
-                    <div class="item-right">
+                    <div class="item-right" v-link="{name: 'detail', params:{id: item.id}}">
                         <h4 v-text="item.title"></h4>
                         <span v-text="item.last_reply_at | date"></span>
                     </div>
@@ -59,19 +59,17 @@
                     this.dataSet = this.userInfo.recent_topics
                 }
                 this.cTab = selected
-            },
-            seeDetail(id) {
-                this.$route.router.go(`/detail/${id}`)
             }
         },
-        ready() {
-            let loginname = localStorage.loginname
-            this.$http.get(`/api/user/${loginname}`)
-                .then((res) => {
-                    this.userInfo = res.json().data
-                    console.log(res.json().data)
-                    this.chTab('reply')
-                })
+        route: {
+            data(transition) {
+                let loginname = transition.to.params.loginname
+                this.$http.get(`/api/user/${loginname}`)
+                    .then((res) => {
+                        this.userInfo = res.json().data
+                        this.chTab('reply')
+                    })
+            }
         }
     }
 </script>
