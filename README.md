@@ -1,6 +1,6 @@
-# mobile-page
+# vue-cnode
 
-> A Vue.js project
+> A cnode webapp powered by Vue.js
 
 ## Build Setup
 
