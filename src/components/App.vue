@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div>
         <router-view></router-view>
         <div class="fix-bottom" v-if="!isWelcom">
             <mt-tabbar :selected.sync="channel">
