@@ -10,7 +10,6 @@
     </div>
 </template>
 <script>
-    import router from '../main.js'
     import { Indicator } from 'mint-ui'
     export default{
         data() {
