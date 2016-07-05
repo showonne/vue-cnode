@@ -113,7 +113,7 @@
 
 <style lang='less'>
     #body{
-        padding-bottom: 30px;
+        padding-bottom: 59px;
     }
     .fix-bottom{
         position: fixed;

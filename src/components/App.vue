@@ -4,15 +4,19 @@
         <div class="fix-bottom" v-if="!isWelcom">
             <mt-tabbar :selected.sync="channel">
                 <mt-tab-item id="topic">
+                    <img src="../assets/topic.png" slot="icon">
                     话题
                 </mt-tab-item>
                 <mt-tab-item id="message">
+                    <img src="../assets/message.png" slot="icon">
                     消息
                 </mt-tab-item>
                 <mt-tab-item id="user">
+                    <img src="../assets/my.png" slot="icon">
                     我的
                 </mt-tab-item>
                 <mt-tab-item id="about">
+                    <img src="../assets/about.png" slot="icon">
                     关于
                 </mt-tab-item>
             </mt-tabbar>
