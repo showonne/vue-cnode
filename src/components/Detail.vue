@@ -49,10 +49,11 @@
 </template>
 
 <script>
-    import { Header, Indicator, MessageBox, Toast } from 'mint-ui'
+    import { Header, Indicator, MessageBox, Toast, Button } from 'mint-ui'
     export default {
         components: {
-            'mt-header': Header
+            'mt-header': Header,
+            'mt-button': Button
         },
         data() {
             return {
@@ -192,6 +193,11 @@
                     this.content = res.json().data
                     Indicator.close()
                 })
+        },
+        route: {
+            data(transition) {
+                this.$parent.channel = 'topic'
+            }
         }
     }
 </script>

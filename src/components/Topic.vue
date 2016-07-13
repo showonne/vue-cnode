@@ -82,7 +82,6 @@
             'default': 'all'
         }],
         ready() {
-            this.$dispatch('chTab', 'topic')
             Indicator.open({
               text: '加载中...',
               spinnerType: 'fading-circle'
@@ -107,6 +106,11 @@
                         this.dataList = res.json().data
                         Indicator.close()
                     })
+            }
+        },
+        route: {
+            data(transition) {
+                this.$parent.channel = 'topic'
             }
         }
     }

@@ -27,6 +27,11 @@
 <script>
     import { TabItem, Tabbar } from 'mint-ui'
     export default {
+        data() {
+            return {
+                channel: this.$route.path.split('/')[1]
+            }
+        },
         components: {
             'mt-tab-item': TabItem,
             'mt-tabbar': Tabbar
@@ -34,17 +39,6 @@
         computed: {
             isWelcom() {
                 return this.$route.path === '/' || this.$route.path === '/login'
-            }
-        },
-        data() {
-            return {
-                channel: this.$route.path.split('/')[1]
-            }
-        },
-        events: {
-            "chTab": function(type){
-                console.log('chTab events invoked.')
-                this.channel = type
             }
         },
         watch: {
