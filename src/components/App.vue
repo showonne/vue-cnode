@@ -41,6 +41,12 @@
                 channel: this.$route.path.split('/')[1]
             }
         },
+        events: {
+            "chTab": function(type){
+                console.log('chTab events invoked.')
+                this.channel = type
+            }
+        },
         watch: {
             'channel': function(val) {
                 if(this.channel === 'user'){

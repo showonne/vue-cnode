@@ -82,6 +82,7 @@
             'default': 'all'
         }],
         ready() {
+            this.$dispatch('chTab', 'topic')
             Indicator.open({
               text: '加载中...',
               spinnerType: 'fading-circle'
