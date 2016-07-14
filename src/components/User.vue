@@ -61,7 +61,6 @@
         },
         route: {
             data(transition) {
-                console.info(transition)
                 let loginname = transition.to.params.loginname
                 this.$http.get(`/api/user/${loginname}`)
                     .then((res) => {

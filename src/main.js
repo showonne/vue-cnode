@@ -62,16 +62,16 @@ router.map({
     }
 })
 
-router.beforeEach((transition) => {
-    if(transition.to.auth){
+router.beforeEach(({to, next, redirect}) => {
+    if(to.auth){
         if(localStorage.id){
-            transition.next()
+            next()
         }else{
-            let backUrl = encodeURIComponent(transition.to.path)
-            transition.redirect(`/login?backUrl=${backUrl}`)
+            let backUrl = encodeURIComponent(to.path)
+            redirect(`/login?backUrl=${backUrl}`)
         }
     }else{
-        transition.next()
+        next()
     }
 })
 

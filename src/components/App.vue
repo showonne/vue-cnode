@@ -43,6 +43,7 @@
         },
         watch: {
             'channel': function(val) {
+                console.info('from app', this.$route)
                 if(this.channel === 'user'){
                     this.$route.router.go({
                         name: 'user',
