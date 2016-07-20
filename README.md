@@ -2,7 +2,7 @@
 
 > A cnode webapp powered by Vue.js
 
-[Online address](http://showonne.com)
+[Online address](http://showonne.com/vue-cnode)
 
 ## Build Setup
 
