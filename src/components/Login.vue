@@ -2,6 +2,7 @@
     <div class="form">
         <mt-field label="通过tocken登录" placeholder="Access Token" :value.sync="tocken"></mt-field>
         <mt-button type="primary" @click="login">登录</mt-button>
+        <mt-button type="default" v-link="{name: 'topic'}">回去逛逛</mt-button>
     </div>
 </template>
 
