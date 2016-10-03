@@ -13,7 +13,10 @@ Object.keys(filters).forEach((key) => {
     Vue.filter(key, filters[key])
 })
 
-const router = new VueRouter()
+const router = new VueRouter({
+    hashbang: false,
+    history: true
+})
 
 router.map({
     '/': {
