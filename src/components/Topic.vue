@@ -1,6 +1,6 @@
 <template>
     <div id="body">
-        <mt-navbar class="page-part" :selected="selected">
+        <mt-navbar class="page-part" v-model="selected">
             <mt-tab-item id="all">全部</mt-tab-item>
             <mt-tab-item id="good">精华</mt-tab-item>
             <mt-tab-item id="ask">问答</mt-tab-item>
@@ -10,8 +10,8 @@
         <div class="shadow-line"></div>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
             <ul>
-                <router-link to="{name: 'detail', params: {id: item.id}}">
-                    <li v-for="item in dataList" class="cell">
+                <li v-for="item in dataList" class="cell">
+                    <router-link :to="{name: 'detail', params: {id: item.id}}">
                         <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" v-bind:data-tab="item.top === true ? 'top' : item.good === true ? 'good' : item.tab">{{item.title}}</h2>
                         <div class="summary">
                             <img :src="item.author.avatar_url" />
@@ -26,8 +26,8 @@
                                 </p>
                             </div>
                         </div>
-                    </li>
-                </router-link>
+                    </router-link>
+                </li>
             </ul>
         </mt-loadmore>
 
@@ -47,7 +47,8 @@
         data() {
             return {
                 dataList: [],
-                page: 1
+                page: 1,
+                selected: 'all'
             }
         },
         methods: {
@@ -79,10 +80,6 @@
                 });
             }
         },
-        props: [{
-            'name': 'selected',
-            'default': 'all'
-        }],
         mounted () {
             Indicator.open({
               text: '加载中...',

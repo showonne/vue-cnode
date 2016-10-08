@@ -193,11 +193,6 @@
                     this.content = res.json().data
                     Indicator.close()
                 })
-        },
-        route: {
-            data(transition) {
-                this.$parent.channel = 'topic'
-            }
         }
     }
 </script>

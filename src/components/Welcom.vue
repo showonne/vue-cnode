@@ -31,12 +31,11 @@
                 })
                 setTimeout(() => {
                     Indicator.close()
-                    this.$route.router.go('topic')
+                    this.$router.push('topic')
                 }, 1000)
             }
         },
         mounted() {
-            console.info('hh')
             let that = this
             this.$nextTick(() => {
                 setTimeout(() => {
@@ -48,27 +47,27 @@
 </script>
 <style lang='less'>
     .fade-ttb{
-        &-transition{
-            transition: all .5s ease;
-        }
-        &-enter{
+        &-enter, &-leave-active{
             transform: translateY(-100%);
+        }
+        &-enter-active, &-leave-active{
+            transition: all .5s ease;
         }
     }
     .fade-ltr{
-        &-transition{
-            transition: all .5s .5s ease;
-        }
-        &-enter{
+        &-enter, &-leave-active{
             transform: translateX(-200%);
+        }
+        &-enter-active, &-leave-active{
+            transition: all .5s ease .5s;
         }
     }
     .fade-rtl{
-        &-transition{
-            transition: all .5s .5s ease;
-        }
-        &-enter{
+        &-enter, &-leave-active{
             transform: translateX(200%);
+        }
+        &-enter-active, &-leave-active{
+            transition: all .5s ease .5s;
         }
     }
     .bg{

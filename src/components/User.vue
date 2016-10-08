@@ -63,15 +63,13 @@
                 this.cTab = selected
             }
         },
-        route: {
-            data(transition) {
-                let loginname = transition.to.params.loginname
-                this.$http.get(`/api/user/${loginname}`)
-                    .then((res) => {
-                        this.userInfo = res.json().data
-                        this.chTab('reply')
-                    })
-            }
+        mounted() {
+            let loginname = this.$route.params.loginname
+            this.$http.get(`/api/user/${loginname}`)
+                .then((res) => {
+                    this.userInfo = res.json().data
+                    this.chTab('reply')
+                })
         }
     }
 </script>

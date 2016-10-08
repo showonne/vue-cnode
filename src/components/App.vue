@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div id="app">
         <router-view></router-view>
         <div class="fix-bottom" v-if="!isWelcom">
-            <mt-tabbar :selected="channel">
+            <mt-tabbar v-model="channel">
                 <mt-tab-item id="topic">
                     <img src="../assets/topic.png" slot="icon">
                     话题
@@ -43,16 +43,15 @@
         },
         watch: {
             'channel': function(val) {
-                console.info('from app', this.$route)
-                if(this.channel === 'user'){
-                    this.$route.router.go({
+                if(val === 'user'){
+                    this.$router.push({
                         name: 'user',
                         params: {
-                            loginname: localStorage.loginname
+                            loginname: localStorage.loginname || 'ramdom'
                         }
                     })
                 }else{
-                    this.$route.router.go({
+                    this.$router.push({
                         name: this.channel
                     })
                 }
