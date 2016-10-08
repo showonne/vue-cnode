@@ -1,6 +1,6 @@
 <template>
     <div id="body">
-        <mt-navbar class="page-part" :selected.sync="selected">
+        <mt-navbar class="page-part" v-model="selected">
             <mt-tab-item id="all">全部</mt-tab-item>
             <mt-tab-item id="good">精华</mt-tab-item>
             <mt-tab-item id="ask">问答</mt-tab-item>
@@ -10,21 +10,23 @@
         <div class="shadow-line"></div>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
             <ul>
-                <li v-for="item in dataList" class="cell" v-link="{name: 'detail', params: {id: item.id}}">
-                    <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" data-tab="{{item.top === true ? 'top' : item.good === true ? 'good' : item.tab | tab}}">{{item.title}}</h2>
-                    <div class="summary">
-                        <img :src="item.author.avatar_url" />
-                        <div class="infobox">
-                            <p>
-                                <span class="authorname">{{item.author.loginname}}</span>
-                                <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
-                            </p>
-                            <p>
-                                <span class="create-at">{{item.create_at | date 'ago'}}</span>
-                                <span class="last-reply-at">{{item.last_reply_at | date 'ago'}}</span>
-                            </p>
+                <li v-for="item in dataList" class="cell">
+                    <router-link :to="{name: 'detail', params: {id: item.id}}">
+                        <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" v-bind:data-tab="item.top === true ? 'top' : item.good === true ? 'good' : item.tab">{{item.title}}</h2>
+                        <div class="summary">
+                            <img :src="item.author.avatar_url" />
+                            <div class="infobox">
+                                <p>
+                                    <span class="authorname">{{item.author.loginname}}</span>
+                                    <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
+                                </p>
+                                <p>
+                                    <span class="create-at">{{item.create_at | date('ago')}}</span>
+                                    <span class="last-reply-at">{{item.last_reply_at | date('ago')}}</span>
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </router-link>
                 </li>
             </ul>
         </mt-loadmore>
@@ -45,7 +47,8 @@
         data() {
             return {
                 dataList: [],
-                page: 1
+                page: 1,
+                selected: 'all'
             }
         },
         methods: {
@@ -54,7 +57,7 @@
                 this.getTopics()
                     .then((res) => {
                         this.dataList = res.json().data
-                        this.$broadcast('onTopLoaded', id);
+                        // this.$broadcast('onTopLoaded', id);
                     }, (err) => {
                         console.log('err', err)
                     })
@@ -64,7 +67,7 @@
                 this.getTopics()
                     .then((res) => {
                         this.dataList = this.dataList.concat(res.json().data)
-                        this.$broadcast('onBottomLoaded', id)
+                        // this.$broadcast('onBottomLoaded', id)
                     })
             },
             getTopics() {
@@ -77,11 +80,7 @@
                 });
             }
         },
-        props: [{
-            'name': 'selected',
-            'default': 'all'
-        }],
-        ready() {
+        mounted () {
             Indicator.open({
               text: '加载中...',
               spinnerType: 'fading-circle'
