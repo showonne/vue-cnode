@@ -1,17 +1,23 @@
 <template>
     <div class="bg">
-        <img src="../assets/cnodejs_light.svg" v-show="show" transition="fade-ttb" />
+        <transition name="fade-ttb">
+            <img src="../assets/cnodejs_light.svg" v-show="show" />
+        </transition>
         <span>Pwoered by:</span>
         <div class="framework">
-            <img src="../assets/logo.png" transition="fade-ltr" v-show="show" />
-            <img src="../assets/mint-ui.svg" transition="fade-rtl" v-show="show" />
+            <transition name="fade-ltr">
+                <img src="../assets/logo.png" v-show="show" />
+            </transition>
+            <transition name="fade-rtl">
+                <img src="../assets/mint-ui.svg" v-show="show" />
+            </transition>
         </div>
         <button type="button" @click="go">Enter</button>
     </div>
 </template>
 <script>
     import { Indicator } from 'mint-ui'
-    export default{
+    export default {
         data() {
             return {
                 show: false
@@ -29,11 +35,14 @@
                 }, 1000)
             }
         },
-        ready() {
+        mounted() {
+            console.info('hh')
             let that = this
-            setTimeout(() => {
-                that.show = true
-            }, 1000)
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    that.show = true
+                }, 1000)
+            })
         }
     }
 </script>

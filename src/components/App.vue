@@ -2,7 +2,7 @@
     <div>
         <router-view></router-view>
         <div class="fix-bottom" v-if="!isWelcom">
-            <mt-tabbar :selected.sync="channel">
+            <mt-tabbar :selected="channel">
                 <mt-tab-item id="topic">
                     <img src="../assets/topic.png" slot="icon">
                     话题

@@ -16,7 +16,7 @@
                     <span>{{content.visit_count}}人浏览过</span>
                 </div>
             </div>
-            {{{content.content}}}
+            <div v-html="content.content"></div>
             <hr>
             <ul class="reply-list">
                 <li v-for="reply in content.replies">
@@ -26,14 +26,14 @@
                             <span class="loginname">{{reply.author.loginname}}</span>
                         </div>
                         <div class="changes">
-                            <span class="create_at">{{reply.create_at | date 'ago'}}</span>
+                            <span class="create_at">{{reply.create_at}}</span>
                             <div class="operation">
                                 <a :class="['up', {uped: uped(reply.ups)}]" @click="up(reply)">{{reply.ups.length}} 赞</a>
                                 <a class="reply" @click="replyTo(reply.id, reply.author.loginname)">回复</a>
                             </div>
                         </div>
                     </div>
-                    {{{reply.content}}}
+                    <div v-html="reply.content"></div>
                     <div class="reply-box" v-if="reply.id === currentId">
                         <textarea v-model="replyToMsg"></textarea>
                         <button type="button" @click="addReplyTo(reply.id, reply.author.loginname)">回复</button>
@@ -183,7 +183,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             Indicator.open({
               text: 'Loading...',
               spinnerType: 'fading-circle'

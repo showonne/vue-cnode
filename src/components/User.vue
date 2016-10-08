@@ -4,7 +4,7 @@
             <div class="card-item">
                 <img class="avatar-photo" :src="userInfo.avatar_url"  />
                 <span class="loginname" v-text="userInfo.loginname"></span>
-                <span class="create_at">{{userInfo.create_at | date}} created.</span>
+                <span class="create_at">{{userInfo.create_at}} created.</span>
             </div>
             <div class="card-item card-button">
                 <span class="score">积分:<b v-text="userInfo.score"></b></span>
@@ -18,14 +18,18 @@
         <ul class="tab-list">
             <li v-for="item in dataSet">
                 <div class="list-item">
-                    <div class="item-left" v-link="{name:'user', params:{loginname: item.author.loginname}}">
-                        <img :src="item.author.avatar_url" />
-                        <span v-text="item.author.loginname"></span>
-                    </div>
-                    <div class="item-right" v-link="{name: 'detail', params:{id: item.id}}">
-                        <h4 v-text="item.title"></h4>
-                        <span v-text="item.last_reply_at | date"></span>
-                    </div>
+                    <router-link to="{name:'user', params:{loginname: item.author.loginname}}">
+                        <div class="item-left">
+                            <img :src="item.author.avatar_url" />
+                            <span v-text="item.author.loginname"></span>
+                        </div>
+                    </router-link>
+                    <router-link to="{name: 'detail', params:{id: item.id}}">
+                        <div class="item-right">
+                            <h4 v-text="item.title"></h4>
+                            <span v-text="item.last_reply_at"></span>
+                        </div>
+                    </router-link>
                 </div>
             </li>
         </ul>

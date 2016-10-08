@@ -13,12 +13,13 @@
                     </div>
                     <div class="item-right">
                         <h4 v-text="message.topic.title"></h4>
-                        <span v-text="message.topic.last_reply_at | date"></span>
+                        <span v-text="message.topic.last_reply_at"></span>
                     </div>
                 </div>
-                <div class="content" v-if="message.id === currentId" transition="fade">
-                    {{{message.reply.content}}}
-                </div>
+                <transition name="fade">
+                    <div class="content" v-if="message.id === currentId" v-html="message.reply.content">
+                    </div>
+                </transition>
             </li>
         </ul>
     </div>
@@ -52,7 +53,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             this.$http.get('/api/messages', {
                 params: {
                     accesstoken: localStorage.accesstoken
@@ -93,11 +94,7 @@
         line-height: 1.4;
         border-bottom: 1px dashed #26a2ff;
     }
-    .fade-transition{
-        transition: all .1s ease;
-        opacity: 1;
-    }
-    .fade-leave, .fade-enter{
+    .fade-leave-active, .fade-enter-active{
         opacity: 0;
     }
     .message-list{
