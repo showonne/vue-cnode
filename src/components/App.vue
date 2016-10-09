@@ -26,7 +26,7 @@
 
 <script>
     import { TabItem, Tabbar } from 'mint-ui'
-    import { bus } from '../main.js'
+    import { bus } from '../eventBus.js'
     export default {
         data() {
             return {

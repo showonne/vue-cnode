@@ -50,7 +50,7 @@
 
 <script>
     import { Header, Indicator, MessageBox, Toast, Button } from 'mint-ui'
-    import { bus } from '../main.js'
+    import { bus } from '../eventBus.js'
     export default {
         components: {
             'mt-header': Header,
