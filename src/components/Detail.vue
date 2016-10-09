@@ -1,7 +1,7 @@
 <template>
     <div class="root">
         <mt-header>
-            <mt-button @click="back" icon="back" slot="left">返回</mt-button>
+            <mt-button @click.native="back" icon="back" slot="left">返回</mt-button>
         </mt-header>
         <div class="body">
             <h1 class="title">{{content.title}}</h1>
@@ -26,7 +26,7 @@
                             <span class="loginname">{{reply.author.loginname}}</span>
                         </div>
                         <div class="changes">
-                            <span class="create_at">{{reply.create_at}}</span>
+                            <span class="create_at">{{reply.create_at | date}}</span>
                             <div class="operation">
                                 <a :class="['up', {uped: uped(reply.ups)}]" @click="up(reply)">{{reply.ups.length}} 赞</a>
                                 <a class="reply" @click="replyTo(reply.id, reply.author.loginname)">回复</a>
@@ -50,6 +50,7 @@
 
 <script>
     import { Header, Indicator, MessageBox, Toast, Button } from 'mint-ui'
+    import { bus } from '../main.js'
     export default {
         components: {
             'mt-header': Header,
@@ -72,7 +73,8 @@
                 },
                 replyMsg: '',
                 replyToMsg: '',
-                currentId: ''
+                currentId: '',
+                bus: bus
             }
         },
         computed: {
@@ -86,7 +88,7 @@
                     this.currentId = toId
                     this.replyToMsg = `@${toName} `
                 }else{
-                    this.$route.router.go({name: 'login'})
+                    this.$router.push({name: 'login'})
                 }
 
             },
@@ -170,7 +172,7 @@
                         })
                     }
                 }else{
-                    this.$route.router.go({name: 'login'})
+                    this.$routor.push({name: 'login'})
                 }
             },
             uped(ups) {
@@ -188,6 +190,7 @@
               text: 'Loading...',
               spinnerType: 'fading-circle'
             })
+            // bus.$emit('chChannel', 'topic')
             this.$http.get(`/api/topic/${this.$route.params.id}`)
                 .then((res) => {
                     this.content = res.json().data
@@ -203,6 +206,7 @@
     }
     .body{
         padding: 10px 10px;
+        padding-bottom: 20px;
     }
     .title{
         color: #2c3e50;

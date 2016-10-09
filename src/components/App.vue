@@ -26,10 +26,12 @@
 
 <script>
     import { TabItem, Tabbar } from 'mint-ui'
+    import { bus } from '../main.js'
     export default {
         data() {
             return {
-                channel: this.$route.path.split('/')[1]
+                channel: this.$route.path.split('/')[1],
+                bus: bus
             }
         },
         components: {
@@ -47,7 +49,7 @@
                     this.$router.push({
                         name: 'user',
                         params: {
-                            loginname: localStorage.loginname || 'ramdom'
+                            loginname: localStorage.loginname
                         }
                     })
                 }else{
@@ -56,6 +58,11 @@
                     })
                 }
             }
+        },
+        mounted() {
+            bus.$on('chChannel', channel => {
+                this.channel = channel
+            })
         }
     }
 </script>

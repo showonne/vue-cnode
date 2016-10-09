@@ -4,7 +4,7 @@
             <div class="card-item">
                 <img class="avatar-photo" :src="userInfo.avatar_url"  />
                 <span class="loginname" v-text="userInfo.loginname"></span>
-                <span class="create_at">{{userInfo.create_at}} created.</span>
+                <span class="create_at">{{userInfo.create_at | date}} created.</span>
             </div>
             <div class="card-item card-button">
                 <span class="score">积分:<b v-text="userInfo.score"></b></span>
@@ -18,17 +18,13 @@
         <ul class="tab-list">
             <li v-for="item in dataSet">
                 <div class="list-item">
-                    <router-link to="{name:'user', params:{loginname: item.author.loginname}}">
-                        <div class="item-left">
-                            <img :src="item.author.avatar_url" />
-                            <span v-text="item.author.loginname"></span>
-                        </div>
+                    <router-link tag="div" :to="{name:'user', params:{loginname: item.author.loginname}}" class="item-left">
+                        <img :src="item.author.avatar_url" />
+                        <span v-text="item.author.loginname"></span>
                     </router-link>
-                    <router-link to="{name: 'detail', params:{id: item.id}}">
-                        <div class="item-right">
-                            <h4 v-text="item.title"></h4>
-                            <span v-text="item.last_reply_at"></span>
-                        </div>
+                    <router-link tag="div" :to="{name: 'detail', params:{id: item.id}}" class="item-right">
+                        <h4 v-text="item.title"></h4>
+                        <span v-text="item.last_reply_at"></span>
                     </router-link>
                 </div>
             </li>
@@ -37,6 +33,7 @@
 </template>
 
 <script>
+    import { bus } from '../main.js'
     export default {
         data() {
             return {
@@ -50,7 +47,8 @@
                     'score': ''
                 },
                 'cTab': 'reply',
-                'dataSet': []
+                'dataSet': [],
+                bus: bus
             }
         },
         methods: {
@@ -63,7 +61,18 @@
                 this.cTab = selected
             }
         },
+        watch: {
+            '$route': function(val) {
+                let loginname = val.params.loginname
+                this.$http.get(`/api/user/${loginname}`)
+                    .then((res) => {
+                        this.userInfo = res.json().data
+                        this.chTab('reply')
+                    })
+            }
+        },
         mounted() {
+            bus.$emit('chChannel', 'user')
             let loginname = this.$route.params.loginname
             this.$http.get(`/api/user/${loginname}`)
                 .then((res) => {
@@ -170,12 +179,15 @@
         display: flex;
         flex-flow: column;
         justify-content: space-around;
+        box-sizing: border-box;
+        padding: 2px;
         img{
             height: 40px;
             width: 40px;
             margin: 0 auto;
         }
         span{
+            margin-top: 4px;
             text-align: center;
         }
     }

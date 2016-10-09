@@ -29,7 +29,7 @@
                     let resJson = res.json()
                     localStorage.loginname = resJson.loginname
                     localStorage.avatar_url = resJson.avatar_url
-                    localStorage.accesstoken = this.tocken
+                    localStorage.accesstoken = this.token
                     localStorage.id = resJson.id
                     let backUrl = this.$route.query.backUrl
                     if(/user/.test(backUrl)){

@@ -40,9 +40,13 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-var App = require('./components/App.vue')
+const App = require('./components/App.vue')
+
+var bus = new Vue()
+exports.bus = bus
 
 new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
+

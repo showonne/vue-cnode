@@ -13,7 +13,7 @@
                     </div>
                     <div class="item-right">
                         <h4 v-text="message.topic.title"></h4>
-                        <span v-text="message.topic.last_reply_at"></span>
+                        <span v-text="message.topic.last_reply_at | date"></span>
                     </div>
                 </div>
                 <transition name="fade">
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+    import { bus } from '../main.js'
     export default {
         data() {
             return {
@@ -33,7 +34,8 @@
                 'hasnot_read_messages': [],
                 'current_display_message': [],
                 'cTab': 'has_read',
-                'currentId': ''
+                'currentId': '',
+                bus: bus
             }
         },
         methods: {
@@ -54,6 +56,7 @@
             }
         },
         mounted() {
+            bus.$emit('chChannel', 'message')
             this.$http.get('/api/messages', {
                 params: {
                     accesstoken: localStorage.accesstoken

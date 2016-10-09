@@ -8,26 +8,24 @@
             <mt-tab-item id="job">招聘</mt-tab-item>
         </mt-navbar>
         <div class="shadow-line"></div>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false" ref="loadmore">
             <ul>
-                <li v-for="item in dataList" class="cell">
-                    <router-link :to="{name: 'detail', params: {id: item.id}}">
-                        <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" v-bind:data-tab="item.top === true ? 'top' : item.good === true ? 'good' : item.tab">{{item.title}}</h2>
-                        <div class="summary">
-                            <img :src="item.author.avatar_url" />
-                            <div class="infobox">
-                                <p>
-                                    <span class="authorname">{{item.author.loginname}}</span>
-                                    <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
-                                </p>
-                                <p>
-                                    <span class="create-at">{{item.create_at | date('ago')}}</span>
-                                    <span class="last-reply-at">{{item.last_reply_at | date('ago')}}</span>
-                                </p>
-                            </div>
+                <router-link v-for="item in dataList" :to="{name: 'detail', params: {id: item.id}}" tag="li" class="cell">
+                    <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" :data-tab="transferTag(item)">{{item.title}}</h2>
+                    <div class="summary">
+                        <img :src="item.author.avatar_url" />
+                        <div class="infobox">
+                            <p>
+                                <span class="authorname">{{item.author.loginname}}</span>
+                                <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
+                            </p>
+                            <p>
+                                <span class="create-at">{{item.create_at | date('ago')}}</span>
+                                <span class="last-reply-at">{{item.last_reply_at | date('ago')}}</span>
+                            </p>
                         </div>
-                    </router-link>
-                </li>
+                    </div>
+                </router-link>
             </ul>
         </mt-loadmore>
 
@@ -37,18 +35,20 @@
 
 <script>
     import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
+    import { bus } from '../main.js'
     export default {
         components: {
             'mt-loadmore': Loadmore,
             'mt-navbar': Navbar,
             'mt-tab-item': TabItem,
-            'mt-tabbar': Tabbar
+            'mt-tabbar': Tabbar,
         },
         data() {
             return {
                 dataList: [],
                 page: 1,
-                selected: 'all'
+                selected: 'all',
+                bus: bus
             }
         },
         methods: {
@@ -57,17 +57,28 @@
                 this.getTopics()
                     .then((res) => {
                         this.dataList = res.json().data
-                        // this.$broadcast('onTopLoaded', id);
+                        this.$refs.loadmore.onTopLoaded(id)
                     }, (err) => {
                         console.log('err', err)
                     })
+            },
+            transferTag(item) {
+                if(item.top) return '顶置'
+                if(item.good) return '精华'
+                return {
+                    'top': '顶置',
+                    'good': '精华',
+                    'job': '招聘',
+                    'ask': '问答',
+                    'share': '分享'
+                }[item.tab]
             },
             loadBottom(id) {
                 this.page += 1
                 this.getTopics()
                     .then((res) => {
                         this.dataList = this.dataList.concat(res.json().data)
-                        // this.$broadcast('onBottomLoaded', id)
+                        this.$refs.loadmore.onBottomLoaded(id)
                     })
             },
             getTopics() {
@@ -85,6 +96,7 @@
               text: '加载中...',
               spinnerType: 'fading-circle'
             })
+            bus.$emit('chChannel', 'topic')
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
@@ -105,11 +117,6 @@
                         this.dataList = res.json().data
                         Indicator.close()
                     })
-            }
-        },
-        route: {
-            data(transition) {
-                this.$parent.channel = 'topic'
             }
         }
     }
