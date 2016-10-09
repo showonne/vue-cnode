@@ -16,15 +16,17 @@
                         <span v-text="message.topic.last_reply_at | date"></span>
                     </div>
                 </div>
-                <div class="content" v-if="message.id === currentId" transition="fade">
-                    {{{message.reply.content}}}
-                </div>
+                <transition name="fade">
+                    <div class="content" v-if="message.id === currentId" v-html="message.reply.content">
+                    </div>
+                </transition>
             </li>
         </ul>
     </div>
 </template>
 
 <script>
+    import { bus } from '../eventBus.js'
     export default {
         data() {
             return {
@@ -32,7 +34,8 @@
                 'hasnot_read_messages': [],
                 'current_display_message': [],
                 'cTab': 'has_read',
-                'currentId': ''
+                'currentId': '',
+                bus: bus
             }
         },
         methods: {
@@ -52,7 +55,8 @@
                 }
             }
         },
-        ready() {
+        mounted() {
+            bus.$emit('chChannel', 'message')
             this.$http.get('/api/messages', {
                 params: {
                     accesstoken: localStorage.accesstoken
@@ -93,11 +97,7 @@
         line-height: 1.4;
         border-bottom: 1px dashed #26a2ff;
     }
-    .fade-transition{
-        transition: all .1s ease;
-        opacity: 1;
-    }
-    .fade-leave, .fade-enter{
+    .fade-leave-active, .fade-enter-active{
         opacity: 0;
     }
     .message-list{

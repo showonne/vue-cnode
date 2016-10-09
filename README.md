@@ -1,6 +1,6 @@
 # vue-cnode
 
-> A cnode webapp powered by Vue.js & Mint-UI
+> A cnode webapp powered by Vue.js v2.x & Mint-UI
 
 [Online address](http://cnode.showonne.com)
 

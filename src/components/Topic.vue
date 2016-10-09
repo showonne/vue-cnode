@@ -1,6 +1,6 @@
 <template>
     <div id="body">
-        <mt-navbar class="page-part" :selected.sync="selected">
+        <mt-navbar class="page-part" v-model="selected">
             <mt-tab-item id="all">全部</mt-tab-item>
             <mt-tab-item id="good">精华</mt-tab-item>
             <mt-tab-item id="ask">问答</mt-tab-item>
@@ -8,10 +8,10 @@
             <mt-tab-item id="job">招聘</mt-tab-item>
         </mt-navbar>
         <div class="shadow-line"></div>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false" ref="loadmore">
             <ul>
-                <li v-for="item in dataList" class="cell" v-link="{name: 'detail', params: {id: item.id}}">
-                    <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" data-tab="{{item.top === true ? 'top' : item.good === true ? 'good' : item.tab | tab}}">{{item.title}}</h2>
+                <router-link v-for="item in dataList" :to="{name: 'detail', params: {id: item.id}}" tag="li" class="cell">
+                    <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" :data-tab="transferTag(item)">{{item.title}}</h2>
                     <div class="summary">
                         <img :src="item.author.avatar_url" />
                         <div class="infobox">
@@ -20,12 +20,12 @@
                                 <span class="visitnum"><b>{{item.reply_count}}</b>/{{item.visit_count}}</span>
                             </p>
                             <p>
-                                <span class="create-at">{{item.create_at | date 'ago'}}</span>
-                                <span class="last-reply-at">{{item.last_reply_at | date 'ago'}}</span>
+                                <span class="create-at">{{item.create_at | date('ago')}}</span>
+                                <span class="last-reply-at">{{item.last_reply_at | date('ago')}}</span>
                             </p>
                         </div>
                     </div>
-                </li>
+                </router-link>
             </ul>
         </mt-loadmore>
 
@@ -35,17 +35,20 @@
 
 <script>
     import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
+    import { bus } from '../eventBus.js'
     export default {
         components: {
             'mt-loadmore': Loadmore,
             'mt-navbar': Navbar,
             'mt-tab-item': TabItem,
-            'mt-tabbar': Tabbar
+            'mt-tabbar': Tabbar,
         },
         data() {
             return {
                 dataList: [],
-                page: 1
+                page: 1,
+                selected: 'all',
+                bus: bus
             }
         },
         methods: {
@@ -54,17 +57,28 @@
                 this.getTopics()
                     .then((res) => {
                         this.dataList = res.json().data
-                        this.$broadcast('onTopLoaded', id);
+                        this.$refs.loadmore.onTopLoaded(id)
                     }, (err) => {
                         console.log('err', err)
                     })
+            },
+            transferTag(item) {
+                if(item.top) return '顶置'
+                if(item.good) return '精华'
+                return {
+                    'top': '顶置',
+                    'good': '精华',
+                    'job': '招聘',
+                    'ask': '问答',
+                    'share': '分享'
+                }[item.tab]
             },
             loadBottom(id) {
                 this.page += 1
                 this.getTopics()
                     .then((res) => {
                         this.dataList = this.dataList.concat(res.json().data)
-                        this.$broadcast('onBottomLoaded', id)
+                        this.$refs.loadmore.onBottomLoaded(id)
                     })
             },
             getTopics() {
@@ -77,15 +91,12 @@
                 });
             }
         },
-        props: [{
-            'name': 'selected',
-            'default': 'all'
-        }],
-        ready() {
+        mounted () {
             Indicator.open({
               text: '加载中...',
               spinnerType: 'fading-circle'
             })
+            bus.$emit('chChannel', 'topic')
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data
@@ -106,11 +117,6 @@
                         this.dataList = res.json().data
                         Indicator.close()
                     })
-            }
-        },
-        route: {
-            data(transition) {
-                this.$parent.channel = 'topic'
             }
         }
     }

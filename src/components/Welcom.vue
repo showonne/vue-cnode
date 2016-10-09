@@ -1,17 +1,23 @@
 <template>
     <div class="bg">
-        <img src="../assets/cnodejs_light.svg" v-show="show" transition="fade-ttb" />
+        <transition name="fade-ttb">
+            <img src="../assets/cnodejs_light.svg" v-show="show" />
+        </transition>
         <span>Pwoered by:</span>
         <div class="framework">
-            <img src="../assets/logo.png" transition="fade-ltr" v-show="show" />
-            <img src="../assets/mint-ui.svg" transition="fade-rtl" v-show="show" />
+            <transition name="fade-ltr">
+                <img src="../assets/logo.png" v-show="show" />
+            </transition>
+            <transition name="fade-rtl">
+                <img src="../assets/mint-ui.svg" v-show="show" />
+            </transition>
         </div>
         <button type="button" @click="go">Enter</button>
     </div>
 </template>
 <script>
     import { Indicator } from 'mint-ui'
-    export default{
+    export default {
         data() {
             return {
                 show: false
@@ -25,41 +31,43 @@
                 })
                 setTimeout(() => {
                     Indicator.close()
-                    this.$route.router.go('topic')
+                    this.$router.push('topic')
                 }, 1000)
             }
         },
-        ready() {
+        mounted() {
             let that = this
-            setTimeout(() => {
-                that.show = true
-            }, 1000)
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    that.show = true
+                }, 1000)
+            })
         }
     }
 </script>
 <style lang='less'>
     .fade-ttb{
-        &-transition{
-            transition: all .5s ease;
-        }
-        &-enter{
+        &-enter, &-leave-active{
             transform: translateY(-100%);
+        }
+        &-enter-active, &-leave-active{
+            transition: all .5s ease;
         }
     }
     .fade-ltr{
-        &-transition{
-            transition: all .5s .5s ease;
-        }
-        &-enter{
+        &-enter, &-leave-active{
             transform: translateX(-200%);
+        }
+        &-enter-active, &-leave-active{
+            transition: all .5s ease .5s;
         }
     }
     .fade-rtl{
-        &-transition{
-            transition: all .5s .5s ease;
-        }
-        &-enter{
+        &-enter, &-leave-active{
             transform: translateX(200%);
+        }
+        &-enter-active, &-leave-active{
+            transition: all .5s ease .5s;
         }
     }
     .bg{

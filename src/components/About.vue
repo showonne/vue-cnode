@@ -5,6 +5,19 @@
     </div>
 </template>
 
+<script>
+    import {bus} from '../eventBus.js'
+    export default {
+        data() {
+            return {
+                bus: bus
+            }
+        },
+        mounted() {
+            bus.$emit('chChannel', 'about')
+        }
+    }
+</script>
 <style lang="less" scoped>
     .body{
         height: 100%;

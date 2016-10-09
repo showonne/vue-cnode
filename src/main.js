@@ -13,71 +13,37 @@ Object.keys(filters).forEach((key) => {
     Vue.filter(key, filters[key])
 })
 
+const routes = [
+        {name: 'welcom', path: '/', component: resolve => require(['./components/Welcom.vue'], resolve)},
+        {name: 'topic', path: '/topic', component: resolve => require(['./components/Topic.vue'], resolve)},
+        {name: 'detail', path: '/detail/:id', component: resolve => require(['./components/Detail.vue'], resolve)},
+        {name: 'about', path: '/about', component: resolve => require(['./components/About.vue'], resolve)},
+        {name: 'login', path: '/login', component: resolve => require(['./components/Login.vue'], resolve)},
+        {name: 'user', path: '/user/:loginname', component: resolve => require(['./components/User.vue'], resolve)},
+        {name: 'message', path: '/message', component: resolve => require(['./components/Message.vue'], resolve)}
+    ]
+
 const router = new VueRouter({
-    hashbang: false,
-    history: true
+    routes
 })
 
-router.map({
-    '/': {
-        name: 'welcom',
-        component: (resolve) => {
-            require(['./components/Welcom.vue'], resolve)
-        }
-    },
-    '/topic': {
-        name: 'topic',
-        component: (resolve) => {
-            require(['./components/Topic.vue'], resolve)
-        }
-    },
-    '/detail/:id': {
-        name: 'detail',
-        component: (resolve) => {
-            require(['./components/Detail.vue'], resolve)
-        }
-    },
-    '/about': {
-        name: 'about',
-        component: (resolve) => {
-            require(['./components/About.vue'], resolve)
-        }
-    },
-    '/login': {
-        name: 'login',
-        component: (resolve) => {
-            require(['./components/Login.vue'], resolve)
-        }
-    },
-    '/user/:loginname': {
-        name: 'user',
-        component: (resolve) => {
-            require(['./components/User.vue'], resolve)
-        },
-        auth: true
-    },
-    '/message': {
-        name: 'message',
-        component: (resolve) => {
-            require(['./components/Message.vue'], resolve)
-        },
-        auth: true
-    }
-})
-
-router.beforeEach(({to, next, redirect}) => {
-    if(to.auth){
+router.beforeEach((to, from, next) => {
+    if(to.name === 'user' || to.name === 'message'){
         if(localStorage.id){
             next()
         }else{
             let backUrl = encodeURIComponent(to.path)
-            redirect(`/login?backUrl=${backUrl}`)
+            router.push(`/login?backUrl=${backUrl}`)
         }
     }else{
         next()
     }
 })
 
-import App from './components/App.vue'
+const App = require('./components/App.vue')
 
-router.start(App, '#app')
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
+
