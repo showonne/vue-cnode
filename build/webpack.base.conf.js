@@ -1,15 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
 const vueConfig = require('./vue-loader.config.js')
-// var config = require('../config')
-// var utils = require('./utils')
-// var projectRoot = path.resolve(__dirname, '../')
 
 module.exports = {
-  devtool: '@source-map',
+  devtool: '#source-map',
   entry: {
     app: './src/client-entry.js',
-    vendor: ['vue', 'vue-loader']
+    vendor: ['vue', 'vue-router', 'es6-promise']
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -34,10 +31,6 @@ module.exports = {
           limit: 10000,
           name: '[name].[ext]?[hash]'
         }
-      },
-      {
-        test: /\.less$/,
-        loader: 'css!less'
       },
       {
         test: /\.css$/,

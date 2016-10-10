@@ -1,5 +1,3 @@
-'use strict'
-
 process.env.VUE_ENV = 'server'
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -27,13 +25,15 @@ if(isProd){
     const bundlePath = resolve('./dist/server-bundle.js')
     renderer = createRenderer(fs.readFileSync(bundlePath, 'utf8'))
 }else {
+    //bundle为webpack生成的server-bundle
     require('./build/setup-dev-server')(app, bundle => {
+        //生成bundle-renderer实例
         renderer = createRenderer(bundle)
     })
 }
 
 function createRenderer(bundle){
-    return createBundleRenderer(bundle)
+    return createBundleRenderer(bundle, {})
 }
 
 app.use('/dist', express.static(path.resolve('./dist')))
@@ -43,6 +43,8 @@ app.get('*', (req, res) => {
         return res.end('waiting form compilation... refresh in a mount.')
     }
     var s = Date.now()
+    console.log('debug req_url: ', req.url)
+
     const context = { url: req.url }
     const renderStream = renderer.renderToStream(context)
     let firstChunk = true
@@ -69,6 +71,7 @@ app.get('*', (req, res) => {
     })
 
     renderStream.on('err', err => {
+        console.log('debug renderStreamError', err)
         throw err
     })
 

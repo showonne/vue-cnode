@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 
 // require('./assets/less/global.less')
 
-Vue.use(VueResource)
+const inBrowser = typeof window !== 'undefined'
+
 Vue.use(VueRouter)
+inBrowser && Vue.use(require('vue-resource'))
 
 import filters from './filters.js'
 

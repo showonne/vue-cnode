@@ -25,6 +25,7 @@ module.exports = function setupDevServer(app, onUpdate){
     const serverCompiler = webpack(serverConfig)
     const mfs = new MFS()
     const outputPath = path.join(serverConfig.output.path, serverConfig.output.filename)
+    // console.log('debug:', outputPath)
     
     serverCompiler.outputFileSystem = mfs
     serverCompiler.watch({}, (err, stats) => {
