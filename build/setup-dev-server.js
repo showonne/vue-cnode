@@ -1,8 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const MFS = require('memory-fs')
-const clientConfig = require('./webpack.client.config')
-const serverConfig = require('./webpack.server.config')
+const clientConfig = require('./webpack.client.config.js')
+const serverConfig = require('./webpack.server.config.js')
 
 module.exports = function setupDevServer(app, onUpdate){
 
@@ -27,9 +27,9 @@ module.exports = function setupDevServer(app, onUpdate){
     const outputPath = path.join(serverConfig.output.path, serverConfig.output.filename)
     
     serverCompiler.outputFileSystem = mfs
-    serverCompiler.watch((), (err, stats) => {
+    serverCompiler.watch({}, (err, stats) => {
         if(err) throw err
-        stats = status.toJson()
+        stats = stats.toJson()
         stats.errors.forEach(err => console.error(err))
         stats.warnings.forEach(err => console.warn(err))
         onUpdate(mfs.readFileSync(outputPath, 'utf8'))

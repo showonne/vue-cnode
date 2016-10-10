@@ -1,31 +1,20 @@
-var path = require('path')
-var config = require('../config')
-var utils = require('./utils')
-var projectRoot = path.resolve(__dirname, '../')
+const path = require('path')
+const webpack = require('webpack')
+const vueConfig = require('./vue-loader.config.js')
+// var config = require('../config')
+// var utils = require('./utils')
+// var projectRoot = path.resolve(__dirname, '../')
 
 module.exports = {
+  devtool: '@source-map',
   entry: {
-    app: './src/main.js'
+    app: './src/client-entry.js',
+    vendor: ['vue', 'vue-loader']
   },
   output: {
-    path: config.build.assetsRoot,
-    publicPath: config.build.assetsPublicPath,
-    filename: '[name].js'
-  },
-  resolve: {
-    extensions: ['', '.js', '.vue'],
-    fallback: [path.join(__dirname, '../node_modules')],
-    alias: {
-      'src': path.resolve(__dirname, '../src'),
-      'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components'),
-      'vue': 'vue/dist/vue.js'
-    },
-    resolve: {
-}
-  },
-  resolveLoader: {
-    fallback: [path.join(__dirname, '../node_modules')]
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '/dist/',
+    filename: 'client-bundle.js'
   },
   module: {
     loaders: [
@@ -36,36 +25,33 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel',
-        include: projectRoot,
         exclude: /node_modules/
-      },
-      {
-        test: /\.json$/,
-        loader: 'json'
-      },
-      {
-        test: /\.html$/,
-        loader: 'vue-html'
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url',
         query: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: '[name].[ext]?[hash]'
         }
       },
       {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-        }
+        test: /\.less$/,
+        loader: 'css!less'
+      },
+      {
+        test: /\.css$/,
+        loader: 'css'
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   },
-  vue: {
-    loaders: utils.cssLoaders()
-  }
+  plugins: [
+    new webpack.LoaderOptionsPlugin({
+      vue: vueConfig
+    })
+  ]
 }

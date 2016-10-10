@@ -13,7 +13,7 @@ const createBundleRenderer = require('vue-server-renderer').createBundleRenderer
 const app = express()
 
 const html = (() => {
-    const template = fs.readFileSync(path.resolve('./index.html', 'utf8'))
+    const template = fs.readFileSync(path.resolve('./index.html'), 'utf8')
     const i = template.indexOf('{{ APP }}')
     const style = isProd ? '<link rel="stylesheet" href="/dist/styles.css">' : ''
     return {
@@ -22,7 +22,7 @@ const html = (() => {
     }
 })()
 
-let rederer
+let renderer
 if(isProd){
     const bundlePath = resolve('./dist/server-bundle.js')
     renderer = createRenderer(fs.readFileSync(bundlePath, 'utf8'))
@@ -74,5 +74,8 @@ app.get('*', (req, res) => {
 
 })
 
-
+const port = process.env.PORT || 8888
+app.listen(port, () => {
+  console.log(`server started at localhost:${port}`)
+})
 
