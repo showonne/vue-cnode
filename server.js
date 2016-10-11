@@ -25,12 +25,15 @@ const html = (() => {
 let renderer
 
 if(isProd){
+    debug('evn: production')
     const bundlePath = path.resolve('./dist/server-bundle.js')
     renderer = createRenderer(fs.readFileSync(bundlePath, 'utf8'))
 }else {
     //bundle为webpack生成的server-bundle
+    debug('loading not product bundle')
     require('./build/setup-dev-server.js')(app, bundle => {
         //生成bundle-renderer实例
+        debug('bundle:', bundle)
         renderer = createRenderer(bundle)
     })
 }
@@ -42,6 +45,7 @@ function createRenderer(bundle){
 app.use('/dist', express.static(path.resolve('./dist')))
 
 app.get('*', (req, res) => {
+    debug('renderer:', renderer)
     if(!renderer){
         return res.end('waiting form compilation... refresh in a mount.')
     }

@@ -21,6 +21,10 @@ if(process.env.NODE_ENV === 'production'){
         less: ExtractTextPlugin.extract({
           loader: "css-loader!less-loader",
           fallbackLoader: "vue-style-loader"
+        }),
+        css: ExtractTextPlugin.extract({
+            loader: "css-loader",
+            fallbackLoader: "vue-style-loader"
         })
     }
 
