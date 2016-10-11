@@ -61,13 +61,6 @@ app.get('*', (req, res) => {
     renderStream.on('data', chunk => {
         debug('chunk: ', chunk)
         if(firstChunk){
-            // if(context.initialState){
-            //     res.write(
-            //         `<script>window.__INITIAL_STATE__=${
-            //             serialize(context.initialState, {isJSON: true})
-            //         }</script>`
-            //     )
-            // }
             firstChunk = false
         }
         res.write(chunk)
