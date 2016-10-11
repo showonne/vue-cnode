@@ -1,3 +1,5 @@
+var debug = require('debug')('server.js')
+
 process.env.VUE_ENV = 'server'
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -21,12 +23,13 @@ const html = (() => {
 })()
 
 let renderer
+
 if(isProd){
-    const bundlePath = resolve('./dist/server-bundle.js')
+    const bundlePath = path.resolve('./dist/server-bundle.js')
     renderer = createRenderer(fs.readFileSync(bundlePath, 'utf8'))
 }else {
     //bundle为webpack生成的server-bundle
-    require('./build/setup-dev-server')(app, bundle => {
+    require('./build/setup-dev-server.js')(app, bundle => {
         //生成bundle-renderer实例
         renderer = createRenderer(bundle)
     })
@@ -43,23 +46,28 @@ app.get('*', (req, res) => {
         return res.end('waiting form compilation... refresh in a mount.')
     }
     var s = Date.now()
-    console.log('debug req_url: ', req.url)
+    debug(req.url)
 
     const context = { url: req.url }
     const renderStream = renderer.renderToStream(context)
     let firstChunk = true
 
+    debug('write begin', html.head)
+
     res.write(html.head)
 
+    debug('write end')
+    
     renderStream.on('data', chunk => {
+        debug('chunk: ', chunk)
         if(firstChunk){
-            if(context.initialState){
-                res.write(
-                    `<script>window.__INITIAL_STATE__=${
-                        serialize(context.initialState, {isJSON: true})
-                    }</script>`
-                )
-            }
+            // if(context.initialState){
+            //     res.write(
+            //         `<script>window.__INITIAL_STATE__=${
+            //             serialize(context.initialState, {isJSON: true})
+            //         }</script>`
+            //     )
+            // }
             firstChunk = false
         }
         res.write(chunk)

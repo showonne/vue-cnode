@@ -14,14 +14,42 @@ Object.keys(filters).forEach((key) => {
     Vue.filter(key, filters[key])
 })
 
+import Welcom from './components/Welcom.vue'
+import Topic from './components/Topic.vue'
+import Detail from './components/Detail.vue'
+import About from './components/About.vue'
+import Login from './components/Login.vue'
+import User from './components/User.vue'
+import Message from './components/Message.vue'
+
+const components = {
+    Welcom,
+    Topic,
+    Detail,
+    About,
+    Login,
+    User,
+    Message
+}
+
+const fetchComponent = (name) => {
+    console.info('fetching component: ', name)
+    return {
+        name: name,
+        render(h){
+            return h(components[name])
+        }
+    }
+}
+
 const routes = [
-        {name: 'welcom', path: '/', component: resolve => require(['./components/Welcom.vue'], resolve)},
-        {name: 'topic', path: '/topic', component: resolve => require(['./components/Topic.vue'], resolve)},
-        {name: 'detail', path: '/detail/:id', component: resolve => require(['./components/Detail.vue'], resolve)},
-        {name: 'about', path: '/about', component: resolve => require(['./components/About.vue'], resolve)},
-        {name: 'login', path: '/login', component: resolve => require(['./components/Login.vue'], resolve)},
-        {name: 'user', path: '/user/:loginname', component: resolve => require(['./components/User.vue'], resolve)},
-        {name: 'message', path: '/message', component: resolve => require(['./components/Message.vue'], resolve)}
+        {name: 'welcom', path: '/', component: fetchComponent('Welcom')},
+        {name: 'topic', path: '/topic', component: fetchComponent('Topic')},
+        {name: 'detail', path: '/detail/:id', component: fetchComponent('Detail')},
+        {name: 'about', path: '/about', component: fetchComponent('About')},
+        {name: 'login', path: '/login', component: fetchComponent('Login')},
+        {name: 'user', path: '/user/:loginname', component: fetchComponent('User')},
+        {name: 'message', path: '/message', component: fetchComponent('Message')}
     ]
 
 const router = new VueRouter({
@@ -41,11 +69,11 @@ router.beforeEach((to, from, next) => {
     }
 })
 
-const App = require('./components/App.vue')
+import App from './components/App.vue'
 
 const app = new Vue({
   router,
-  render: h => h(App)
+  ...App
 })
 
 export { app, router }

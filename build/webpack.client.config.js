@@ -28,12 +28,12 @@ if(process.env.NODE_ENV === 'production'){
         new ExtractTextPlugin('styles.css'),
         new webpack.LoaderOptionsPlugin({
             minimize: true
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
         })
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     }
+        // })
     )
 }
 
