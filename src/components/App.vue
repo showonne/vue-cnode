@@ -46,12 +46,16 @@
         watch: {
             'channel': function(val) {
                 if(val === 'user'){
-                    this.$router.push({
-                        name: 'user',
-                        params: {
-                            loginname: localStorage.loginname
-                        }
-                    })
+                    if(localStorage.loginname){
+                        this.$router.push({
+                            name: 'user',
+                            params: {
+                                loginname: localStorage.loginname
+                            }
+                        })
+                    }else{
+                        this.$router.push({name: 'login'})
+                    }
                 }else{
                     this.$router.push({
                         name: this.channel
@@ -59,10 +63,16 @@
                 }
             }
         },
-        mounted() {
-            bus.$on('chChannel', channel => {
+        methods: {
+            chChannel(channel) {
                 this.channel = channel
-            })
+            }
+        },
+        mounted() {
+            bus.$on('chChannel', this.chChannel)
+        },
+        beforeDestroy() {
+            bus.$off('chChannel', this.chChannel)
         }
     }
 </script>

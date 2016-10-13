@@ -13,14 +13,18 @@ Object.keys(filters).forEach((key) => {
     Vue.filter(key, filters[key])
 })
 
+const getComponent = name => {
+    return resolve => require([`./components/${name}.vue`], resolve)
+}
+
 const routes = [
-        {name: 'welcom', path: '/', component: resolve => require(['./components/Welcom.vue'], resolve)},
-        {name: 'topic', path: '/topic', component: resolve => require(['./components/Topic.vue'], resolve)},
-        {name: 'detail', path: '/detail/:id', component: resolve => require(['./components/Detail.vue'], resolve)},
-        {name: 'about', path: '/about', component: resolve => require(['./components/About.vue'], resolve)},
-        {name: 'login', path: '/login', component: resolve => require(['./components/Login.vue'], resolve)},
-        {name: 'user', path: '/user/:loginname', component: resolve => require(['./components/User.vue'], resolve)},
-        {name: 'message', path: '/message', component: resolve => require(['./components/Message.vue'], resolve)}
+        {name: 'welcom', path: '/', component: getComponent('Welcom')},
+        {name: 'topic', path: '/topic', component: getComponent('Topic')},
+        {name: 'detail', path: '/detail/:id', component: getComponent('Detail')},
+        {name: 'about', path: '/about', component: getComponent('About')},
+        {name: 'login', path: '/login', component: getComponent('Login')},
+        {name: 'user', path: '/user/:loginname', component: getComponent('User'), meta: {auth: true}},
+        {name: 'message', path: '/message', component: getComponent('Message'), meta: {auth: true}}
     ]
 
 const router = new VueRouter({
@@ -28,7 +32,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if(to.name === 'user' || to.name === 'message'){
+    if(to.meta.auth){
         if(localStorage.id){
             next()
         }else{

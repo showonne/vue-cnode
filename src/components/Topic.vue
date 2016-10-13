@@ -10,7 +10,7 @@
         <div class="shadow-line"></div>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :auto-fill="false" ref="loadmore">
             <ul>
-                <router-link v-for="item in dataList" :to="{name: 'detail', params: {id: item.id}}" tag="li" class="cell">
+                <router-link v-for="item in dataList" :to="{name: 'detail', params: {id: item.id}}" class="cell">
                     <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" :data-tab="transferTag(item)">{{item.title}}</h2>
                     <div class="summary">
                         <img :src="item.author.avatar_url" />
@@ -122,7 +122,7 @@
     }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
     #body{
         padding-bottom: 59px;
     }
@@ -217,5 +217,21 @@
         background: #26A2FF;
         color: #fff;
         padding: 2px 4px;
+    }
+    ul{
+        padding: 0 5px;
+        a{
+            width: 100%;
+            box-sizing: border-box;
+            text-decoration: none;
+            display: inline-block;
+            border-bottom: 1px solid #ccc;
+        }
+        .authorname{
+            color: #272636;
+        }
+        .visitnum{
+            color: #000;
+        }
     }
 </style>

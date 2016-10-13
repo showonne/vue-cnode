@@ -15,7 +15,7 @@
     "mint-ui": "^2.0.0-rc.2",
     "vue": "^2.0.1",
     "vue-resource": "^0.9.3",
-    "vue-router": "^2.0.0-rc.5"
+    "vue-router": "^2.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
