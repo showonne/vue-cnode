@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import { bus } from '../main.js'
+    import { bus } from '../bus.js'
     export default {
         data() {
             return {

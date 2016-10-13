@@ -35,7 +35,7 @@
 
 <script>
     import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
-    import { bus } from '../main.js'
+    import { bus } from '../bus.js'
     export default {
         components: {
             'mt-loadmore': Loadmore,
