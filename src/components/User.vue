@@ -18,14 +18,14 @@
         <ul class="tab-list">
             <li v-for="item in dataSet">
                 <div class="list-item">
-                    <div class="item-left" v-link="{name:'user', params:{loginname: item.author.loginname}}">
+                    <router-link tag="div" :to="{name:'user', params:{loginname: item.author.loginname}}" class="item-left">
                         <img :src="item.author.avatar_url" />
                         <span v-text="item.author.loginname"></span>
-                    </div>
-                    <div class="item-right" v-link="{name: 'detail', params:{id: item.id}}">
+                    </router-link>
+                    <router-link tag="div" :to="{name: 'detail', params:{id: item.id}}" class="item-right">
                         <h4 v-text="item.title"></h4>
-                        <span v-text="item.last_reply_at | date"></span>
-                    </div>
+                        <span v-text="item.last_reply_at"></span>
+                    </router-link>
                 </div>
             </li>
         </ul>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+    import { bus } from '../main.js'
     export default {
         data() {
             return {
@@ -46,7 +47,8 @@
                     'score': ''
                 },
                 'cTab': 'reply',
-                'dataSet': []
+                'dataSet': [],
+                bus: bus
             }
         },
         methods: {
@@ -59,15 +61,24 @@
                 this.cTab = selected
             }
         },
-        route: {
-            data(transition) {
-                let loginname = transition.to.params.loginname
+        watch: {
+            '$route': function(val) {
+                let loginname = val.params.loginname
                 this.$http.get(`/api/user/${loginname}`)
                     .then((res) => {
                         this.userInfo = res.json().data
                         this.chTab('reply')
                     })
             }
+        },
+        mounted() {
+            bus.$emit('chChannel', 'user')
+            let loginname = this.$route.params.loginname
+            this.$http.get(`/api/user/${loginname}`)
+                .then((res) => {
+                    this.userInfo = res.json().data
+                    this.chTab('reply')
+                })
         }
     }
 </script>
@@ -168,12 +179,15 @@
         display: flex;
         flex-flow: column;
         justify-content: space-around;
+        box-sizing: border-box;
+        padding: 2px;
         img{
             height: 40px;
             width: 40px;
             margin: 0 auto;
         }
         span{
+            margin-top: 4px;
             text-align: center;
         }
     }

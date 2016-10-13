@@ -1,8 +1,10 @@
 <template>
     <div class="form">
-        <mt-field label="通过tocken登录" placeholder="Access Token" :value.sync="tocken"></mt-field>
-        <mt-button type="primary" @click="login">登录</mt-button>
-        <mt-button type="default" v-link="{name: 'topic'}">回去逛逛</mt-button>
+        <mt-field label="通过tocken登录" placeholder="Access Token" v-model="token"></mt-field>
+        <mt-button type="primary" @click.native="login">登录</mt-button>
+        <router-link :to="{name: 'topic'}">
+            <mt-button type="default">回去逛逛</mt-button>
+        </router-link>
     </div>
 </template>
 
@@ -13,26 +15,27 @@
             'mt-field': Field,
             'mt-button': Button
         },
-        props: [{
-            name: 'tocken',
-            default: ''
-        }],
+        data() {
+            return {
+                token: ''
+            }
+        },
         methods: {
             login() {
                 this.$http.post('/api/accesstoken', {
-                    accesstoken: this.tocken
+                    accesstoken: this.token
                 })
                 .then((res) => {
                     let resJson = res.json()
                     localStorage.loginname = resJson.loginname
                     localStorage.avatar_url = resJson.avatar_url
-                    localStorage.accesstoken = this.tocken
+                    localStorage.accesstoken = this.token
                     localStorage.id = resJson.id
                     let backUrl = this.$route.query.backUrl
                     if(/user/.test(backUrl)){
-                        this.$route.router.go({name: 'user', params: {loginname: localStorage.loginname}})
+                        this.$router.push({name: 'user', params: {loginname: localStorage.loginname}})
                     }else{
-                        this.$route.router.go({name: backUrl})
+                        this.$router.push({name: backUrl})
                     }
                 })
             }
