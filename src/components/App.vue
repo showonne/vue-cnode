@@ -28,6 +28,7 @@
     import { TabItem, Tabbar } from 'mint-ui'
     import { bus } from '../bus.js'
     export default {
+        name: 'App',
         data() {
             return {
                 channel: this.$route.path.split('/')[1],
@@ -54,7 +55,7 @@
                             }
                         })
                     }else{
-                        this.$router.push({name: 'login'})
+                        this.$router.push({name: 'login', query: {backUrl: encodeURIComponent('/user')}})
                     }
                 }else{
                     this.$router.push({

@@ -18,7 +18,7 @@ const getComponent = name => {
 }
 
 const routes = [
-        {name: 'welcom', path: '/', component: getComponent('Welcom')},
+        {name: 'welcom', path: '/', component: getComponent('Welcome')},
         {name: 'topic', path: '/topic', component: getComponent('Topic')},
         {name: 'detail', path: '/detail/:id', component: getComponent('Detail')},
         {name: 'about', path: '/about', component: getComponent('About')},
@@ -38,6 +38,7 @@ router.beforeEach((to, from, next) => {
             next()
         }else{
             let backUrl = encodeURIComponent(to.path)
+            console.info('cb: ', backUrl)
             router.push(`/login?backUrl=${backUrl}`)
         }
     }else{

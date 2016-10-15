@@ -1,13 +1,22 @@
 <template >
-    <div class="body">
-        <h2>一个拿来熟悉vue的项目</h2>
-        <a href="https://github.com/showonne/mobile-page.git">项目地址</a>
+    <div class="container">
+        <mt-header title="关于项目"></mt-header>
+        <div class="body">
+            <h2>基于 Vue.js 的 CNode WebApp.</h2>
+            <p>框架: Vue.js, Vue-Router, Mint UI.</p>
+            <a href="https://github.com/showonne/mobile-page.git">Github地址</a>
+        </div>
     </div>
 </template>
 
 <script>
-    import {bus} from '../bus.js'
+    import { bus } from '../bus.js'
+    import { Header } from 'mint-ui'
     export default {
+        name: 'About',
+        components: {
+            'mt-header': Header
+        },
         data() {
             return {
                 bus: bus
@@ -19,11 +28,20 @@
     }
 </script>
 <style lang="less" scoped>
+    .container{
+        height: 100%;
+    }
     .body{
         height: 100%;
         display: flex;
         justify-content: center;
         flex-flow: column;
         align-items: center;
+        h2{
+            margin: 20px 0;
+        }
+        p{
+            margin: 5px 0;
+        }
     }
 </style>

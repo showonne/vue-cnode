@@ -1,10 +1,11 @@
 <template>
     <div>
+        <mt-header title="消息中心"></mt-header>
         <ul class="tab">
             <li @click="chTab('has_read')" :class="{selected: cTab === 'has_read'}">已读</li>
             <li @click="chTab('hasnot_read')" :class="{selected: cTab === 'hasnot_read'}">未读</li>
         </ul>
-        <ul class="message-list">
+        <ul class="message-list" v-if="current_display_message.length !== 0">
             <li v-for="message in current_display_message">
                 <div class="list-item" @click="showContent(message.id)">
                     <div class="item-left">
@@ -22,12 +23,18 @@
                 </transition>
             </li>
         </ul>
+        <h5 v-else class="none">暂无消息</h5>
     </div>
 </template>
 
 <script>
     import { bus } from '../bus.js'
+    import { Header } from 'mint-ui'
     export default {
+        name: 'Message',
+        components: {
+            'mt-header': Header
+        },
         data() {
             return {
                 'has_read_messages': [],
@@ -135,5 +142,13 @@
             font-weight: 800;
             line-height: 1.5;
         }
+    }
+    .none{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        font-size: 18px;
+        color: grey;
     }
 </style>

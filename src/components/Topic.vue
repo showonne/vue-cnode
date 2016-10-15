@@ -1,6 +1,6 @@
 <template>
     <div id="body">
-        <mt-navbar class="page-part" v-model="selected">
+        <mt-navbar class="page-part" v-model="selected" :fixed="true">
             <mt-tab-item id="all">全部</mt-tab-item>
             <mt-tab-item id="good">精华</mt-tab-item>
             <mt-tab-item id="ask">问答</mt-tab-item>
@@ -13,7 +13,9 @@
                 <router-link v-for="item in dataList" :to="{name: 'detail', params: {id: item.id}}" class="cell">
                     <h2 class="cell-title" :class="[{'top': item.top, 'good': item.good}, item.tab]" :data-tab="transferTag(item)">{{item.title}}</h2>
                     <div class="summary">
-                        <img :src="item.author.avatar_url" />
+                        <div class="photo">
+                            <img :src="item.author.avatar_url" />
+                        </div>
                         <div class="infobox">
                             <p>
                                 <span class="authorname">{{item.author.loginname}}</span>
@@ -28,15 +30,14 @@
                 </router-link>
             </ul>
         </mt-loadmore>
-
     </div>
-
 </template>
 
 <script>
     import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
     import { bus } from '../bus.js'
     export default {
+        name: 'Topic',
         components: {
             'mt-loadmore': Loadmore,
             'mt-navbar': Navbar,
@@ -124,7 +125,8 @@
 
 <style lang='less' scoped>
     #body{
-        padding-bottom: 59px;
+        padding-bottom: 60px;
+        padding-top: 42px;
     }
     .fix-bottom{
         position: fixed;
@@ -191,13 +193,17 @@
     .summary{
         padding-top: 10px;
         display: flex;
-        img{
+        .photo{
             height: 40px;
             width: 40px;
         }
-        .infobox{
+        img{
+            height: 100%;
             width: 100%;
-            padding-left: 4px;
+        }
+        .infobox{
+            flex: 1;
+            padding-left: 12px;
             p{
                 padding: 4px 0;
                 font-size: 14px;

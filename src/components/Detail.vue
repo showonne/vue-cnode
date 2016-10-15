@@ -52,6 +52,7 @@
     import { Header, Indicator, MessageBox, Toast, Button } from 'mint-ui'
     import { bus } from '../bus.js'
     export default {
+        name: 'Detail',
         components: {
             'mt-header': Header,
             'mt-button': Button
@@ -230,6 +231,7 @@
     }
     .markdown-text{
         word-wrap: break-word;
+        line-height: 1.2;
         img{
             max-width: 100%;
             margin: 5px 0;
@@ -252,7 +254,6 @@
             padding-bottom: 4px;
         }
         p{
-            line-height: 1.2;
             margin: 1em 0;
         }
         ul{
@@ -268,7 +269,7 @@
             padding-left: 20px;
             margin: 4px 0;
             li{
-                margin: 2px 0;
+                margin: 4px 0;
             }
         }
         table{
@@ -282,6 +283,7 @@
         blockquote{
             border-left: 4px solid #ccc;
             padding: 4px 0 4px 15px;
+            margin-bottom: 10px;
             background: #eee;
             p{
                 margin: 0;

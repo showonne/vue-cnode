@@ -18,6 +18,7 @@
 <script>
     import { Indicator } from 'mint-ui'
     export default {
+        name: 'Welcome',
         data() {
             return {
                 show: false
