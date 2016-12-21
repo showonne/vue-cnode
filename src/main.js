@@ -48,9 +48,6 @@ router.beforeEach((to, from, next) => {
 
 const App = require('./components/App.vue')
 
-var bus = new Vue()
-exports.bus = bus
-
 new Vue({
   router,
   render: h => h(App)
