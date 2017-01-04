@@ -28,7 +28,6 @@
 </template>
 
 <script>
-    import { bus } from '../bus.js'
     import { Header } from 'mint-ui'
     export default {
         name: 'Message',
@@ -41,8 +40,7 @@
                 'hasnot_read_messages': [],
                 'current_display_message': [],
                 'cTab': 'has_read',
-                'currentId': '',
-                bus: bus
+                'currentId': ''
             }
         },
         methods: {
@@ -63,7 +61,6 @@
             }
         },
         mounted() {
-            bus.$emit('chChannel', 'message')
             this.$http.get('/api/messages', {
                 params: {
                     accesstoken: localStorage.accesstoken

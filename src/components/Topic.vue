@@ -34,8 +34,8 @@
 </template>
 
 <script>
+    import Vuex from 'vuex'
     import { Loadmore, Navbar, TabItem, Indicator, Tabbar } from 'mint-ui'
-    import { bus } from '../bus.js'
     export default {
         name: 'Topic',
         components: {
@@ -48,8 +48,7 @@
             return {
                 dataList: [],
                 page: 1,
-                selected: 'all',
-                bus: bus
+                selected: 'all'
             }
         },
         methods: {
@@ -97,7 +96,6 @@
               text: '加载中...',
               spinnerType: 'fading-circle'
             })
-            bus.$emit('chChannel', 'topic')
             this.getTopics()
                 .then((res) => {
                     this.dataList = res.json().data

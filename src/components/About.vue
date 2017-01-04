@@ -10,20 +10,11 @@
 </template>
 
 <script>
-    import { bus } from '../bus.js'
     import { Header } from 'mint-ui'
     export default {
         name: 'About',
         components: {
             'mt-header': Header
-        },
-        data() {
-            return {
-                bus: bus
-            }
-        },
-        mounted() {
-            bus.$emit('chChannel', 'about')
         }
     }
 </script>

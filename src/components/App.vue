@@ -26,18 +26,16 @@
 
 <script>
     import { TabItem, Tabbar } from 'mint-ui'
-    import { bus } from '../bus.js'
     export default {
         name: 'App',
-        data() {
-            return {
-                channel: this.$route.path.split('/')[1],
-                bus: bus
-            }
-        },
         components: {
             'mt-tab-item': TabItem,
             'mt-tabbar': Tabbar
+        },
+        data() {
+            return {
+                channel: this.$store.state.channel
+            }
         },
         computed: {
             isWelcom() {
@@ -45,7 +43,7 @@
             }
         },
         watch: {
-            'channel': function(val) {
+            channel (val) {
                 if(val === 'user'){
                     if(localStorage.loginname){
                         this.$router.push({
@@ -54,6 +52,7 @@
                                 loginname: localStorage.loginname
                             }
                         })
+                        this.$store.commit('chChannel', 'user')
                     }else{
                         this.$router.push({name: 'login', query: {backUrl: encodeURIComponent('/user')}})
                     }
@@ -61,19 +60,9 @@
                     this.$router.push({
                         name: this.channel
                     })
+                    this.$store.commit('chChannel', val)
                 }
             }
-        },
-        methods: {
-            chChannel(channel) {
-                this.channel = channel
-            }
-        },
-        mounted() {
-            bus.$on('chChannel', this.chChannel)
-        },
-        beforeDestroy() {
-            bus.$off('chChannel', this.chChannel)
         }
     }
 </script>

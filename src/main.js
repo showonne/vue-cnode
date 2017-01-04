@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 
+import store from './store'
+
 require('./assets/less/global.less')
 
 Vue.use(VueResource)
@@ -50,6 +52,7 @@ const App = require('./components/App.vue')
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
 

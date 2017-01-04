@@ -38,7 +38,6 @@
 </template>
 
 <script>
-    import { bus } from '../bus.js'
     import { Header, Button, MessageBox, Indicator, Toast } from 'mint-ui'
 
     export default {
@@ -59,8 +58,7 @@
                     'score': ''
                 },
                 'cTab': 'reply',
-                'dataSet': [],
-                bus: bus
+                'dataSet': []
             }
         },
         methods: {
@@ -106,7 +104,6 @@
             }
         },
         mounted() {
-            bus.$emit('chChannel', 'user')
             let loginname = this.$route.params.loginname
             this.$http.get(`/api/user/${loginname}`)
                 .then((res) => {
