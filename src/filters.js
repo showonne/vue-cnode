@@ -1,5 +1,5 @@
 export default {
-    tab: (input) => {
+    tab (input) {
         return {
             'top': '顶置',
             'good': '精华',
@@ -8,7 +8,7 @@ export default {
             'share': '分享'
         }[input]
     },
-    date: (input, format) => {
+    date (input, format) {
         if(format === 'ago'){
             let date = new Date(String(input)).getTime(), now = Date.now(), delta = parseInt((now - date) / 1000)
             switch (true) {

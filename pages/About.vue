@@ -39,7 +39,6 @@
         align-items: center;
         h2{
             margin: 20px 0;
-            text-align: center;
         }
         p{
             margin: 5px 0;

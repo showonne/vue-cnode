@@ -191,6 +191,7 @@
               text: 'Loading...',
               spinnerType: 'fading-circle'
             })
+            // bus.$emit('chChannel', 'topic')
             this.$http.get(`/api/topic/${this.$route.params.id}`)
                 .then((res) => {
                     this.content = res.json().data
