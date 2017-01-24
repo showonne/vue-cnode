@@ -1,6 +1,8 @@
 <template>
     <div id="app">
-        <router-view></router-view>
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
         <div class="fix-bottom" v-if="!isWelcom">
             <mt-tabbar v-model="channel">
                 <mt-tab-item id="topic">

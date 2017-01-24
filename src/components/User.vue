@@ -58,7 +58,8 @@
                     'score': ''
                 },
                 'cTab': 'reply',
-                'dataSet': []
+                'dataSet': [],
+                'preUsername': ''
             }
         },
         methods: {
@@ -95,11 +96,13 @@
         },
         watch: {
             '$route': function(val) {
+                if(val.name !== 'user' || val.params.loginname === this.preUsername) return
                 let loginname = val.params.loginname
                 this.$http.get(`/api/user/${loginname}`)
                     .then((res) => {
                         this.userInfo = res.json().data
                         this.chTab('reply')
+                        this.preUsername = loginname
                     })
             }
         },

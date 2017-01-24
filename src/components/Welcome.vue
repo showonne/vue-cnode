@@ -3,7 +3,7 @@
         <transition name="fade-ttb">
             <img src="../assets/cnodejs_light.svg" v-show="show" />
         </transition>
-        <span>Pwoered by:</span>
+        <span>Powered by: </span>
         <div class="framework">
             <transition name="fade-ltr">
                 <img src="../assets/logo.png" v-show="show" />
@@ -17,6 +17,7 @@
 </template>
 <script>
     import { Indicator } from 'mint-ui'
+
     export default {
         name: 'Welcome',
         data() {
@@ -32,15 +33,15 @@
                 })
                 setTimeout(() => {
                     Indicator.close()
+                    this.$store.commit('chChannel', 'topic')
                     this.$router.push('topic')
                 }, 1000)
             }
         },
         mounted() {
-            let that = this
             this.$nextTick(() => {
                 setTimeout(() => {
-                    that.show = true
+                    this.show = true
                 }, 1000)
             })
         }
